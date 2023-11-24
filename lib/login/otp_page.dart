@@ -8,8 +8,8 @@ import 'package:ras_club_flutter/utils.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'const/authbutton.dart';
-import 'const/constants.dart';
+import '../const/authbutton.dart';
+import '../const/constants.dart';
 
 class OtpPage extends StatefulWidget {
   final mobilenumber;

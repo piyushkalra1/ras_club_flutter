@@ -4,7 +4,8 @@ import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ras_club_flutter/homepage.dart';
-import 'package:ras_club_flutter/otp_page.dart';
+import 'package:ras_club_flutter/login/Registration.dart';
+import 'package:ras_club_flutter/login/otp_page.dart';
 import 'package:ras_club_flutter/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -85,6 +86,10 @@ class _LoginState extends State<Login> {
                   child: TextFormField(
                     controller: mobilecontroller,
                     keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     decoration: const InputDecoration(
                       focusColor: Colors.white,
                       //add prefix icon
@@ -164,19 +169,19 @@ class _LoginState extends State<Login> {
                   children: [
                     Text('Not Registered?'),
                     TextButton(onPressed: (){
-
-                      if (Platform.isAndroid || Platform.isIOS) {
-                        final appId = Platform.isAndroid ? 'YOUR_ANDROID_PACKAGE_ID' : 'YOUR_IOS_APP_ID';
-                        final url = Uri.parse(
-                          Platform.isAndroid
-                              ? "https://rasclub.org/registration_outsider.html"
-                              : "https://rasclub.org/registration_outsider.html",
-                        );
-                        launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterUser()));
+                      // if (Platform.isAndroid || Platform.isIOS) {
+                      //   final appId = Platform.isAndroid ? 'YOUR_ANDROID_PACKAGE_ID' : 'YOUR_IOS_APP_ID';
+                      //   final url = Uri.parse(
+                      //     Platform.isAndroid
+                      //         ? "https://rasclub.org/registration_outsider.html"
+                      //         : "https://rasclub.org/registration_outsider.html",
+                      //   );
+                      //   launchUrl(
+                      //     url,
+                      //     mode: LaunchMode.externalApplication,
+                      //   );
+                      // }
                     }, child: Text('Create account',style: TextStyle(
                       color: Colors.pink
                     ),))

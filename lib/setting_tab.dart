@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'const/constants.dart';
-import 'login_screen.dart';
+import 'login/login_screen.dart';
 
 
 class Settingtab extends StatefulWidget {

@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ras_club_flutter/homepage.dart';
-import 'package:ras_club_flutter/login_screen.dart';
+import 'package:ras_club_flutter/login/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
-import 'const/constants.dart';
+import '../../main.dart';
+import '../const/constants.dart';
 
 
 class Splash extends StatefulWidget {

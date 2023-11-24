@@ -5,7 +5,7 @@ import 'package:ras_club_flutter/homepage.dart';
 import 'package:ras_club_flutter/section2/Categorytype.dart';
 import 'package:ras_club_flutter/section2/FoodCategories.dart';
 import 'package:ras_club_flutter/section2/countprovider.dart';
-import 'package:ras_club_flutter/splash_screen.dart';
+import 'package:ras_club_flutter/login/splash_screen.dart';
 
 
 
@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
+        // home: Splash(),
         home: Splash(),
       )
     );
