@@ -11,6 +11,7 @@ import 'package:ras_club_flutter/model/SportsModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart'as http;
 import '../../Booking/book_kingroom.dart';
+import '../../const/dialogueerror.dart';
 import '../PARTYHALL/partyhall_booling.dart';
 import '../../const/constants.dart';
 import '../../const/custom_grey_container.dart';
@@ -35,6 +36,7 @@ class _RooftopHometabState extends State<RooftopHometab> {
   String nonmemberfee ="";
   int radiotittle= -1 ;
   int radiotittle1 =-1;
+  String message ="";
   List<String> gaming =['Badminton','Squash','Tennis'];
   List<String> type =['Playing', 'Coaching'];
   List<String>playingtime= ['Select Time Slot*',
@@ -146,9 +148,9 @@ class _RooftopHometabState extends State<RooftopHometab> {
                   CustomStaticDropdown(
 
                     items: ['Select Month*',
-                      'October 2023' , 'November 2023', 'December 2023',
+
                       'January 2024',"Feburary 2024",'March 2024','April 2024','May 2024', 'June 2024', 'July 2024', 'August 2024',
-                      'September 2024',
+                      'September 2024', 'October 2024' , 'November 2024', 'December 2024',
                     ], onItemSelected: (String? value) {
                     setState(() {
                       value.toString();
@@ -244,131 +246,142 @@ class _RooftopHometabState extends State<RooftopHometab> {
 
         var data = jsonDecode(response.body);
         print(data);
-        var gamingModel =SportsModel.fromJson(data);
-        print("data convert success");
-        print('1234e4');
-        print(response.body);
         setState(() {
-          memberfee = gamingModel.feesMember.toString();
-          nonmemberfee = gamingModel.feesNonMember.toString();
+          message = data["Message"].toString();
         });
-        showModalBottomSheet<void>(
+        if( message=="Unauthorized User")    {
+          showDialog(context: context, builder: (BuildContext bc) =>
+              DialogError(errorMsg: '',));
+        }
+        else{
+          var gamingModel =SportsModel.fromJson(data);
+          print("data convert success");
+          print('1234e4');
+          print(response.body);
+          setState(() {
+            memberfee = gamingModel.feesMember.toString();
+            nonmemberfee = gamingModel.feesNonMember.toString();
+          });
+          showModalBottomSheet<void>(
 
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 350,
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 350,
 
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                  )
-              ),
-              child: Center(
-                child:  Column(
-
-                  children: <Widget>[
-                    Container(height: 160,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)
-
-                          ),
-                          color: Colors.black12
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 13,),
-                            if(gamingModel.availablity=="Available")...{
-
-                              CircleAvatar(
-                                backgroundColor: Colors.green,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.check,color: Colors.white,),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            }else...{
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.close,color: Colors.white,),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            },
-
-
-                            SizedBox(height: 12,),
-                            Text('${gaming[radiotittle]} - ${type[radiotittle1]}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text('Month',style: TextStyle(fontSize: 15),),
-                        Text(' ${month}',style: TextStyle1,)
-                      ],
-                    ),
-
-                    Column(
-                      children: [
-                        Text('Time Slot ',style: TextStyle(fontSize: 15),),
-                        Text('${timezone}',style: TextStyle1,)
-                      ],
-                    ),
-
-
-                    Column(
-                      children: [
-                        Text('Fees',style: TextStyle(fontSize: 15),),
-                        Text('${nonmemberfee}',style: TextStyle1,)
-                      ],
-                    ),
-
-
-
-
-                    if(gamingModel.availablity=="Available")...{
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SportDetails(month: "${month}", timeslot: "${timezone}",feesamount: "${nonmemberfee}",orderno: '${orderId.toString()}',)));
-                        },
-                        child: Container(
-                          height: 40,
-                          color: Colors.green,
-                          width: double.infinity,
-                          // margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                        ),
-                      )
-                    }
-                    else
-                      Container(
-                        height: 40,
-                        color: Colors.red,
-                        width: double.infinity,
-                        child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                      )
-
-
-
-
-                  ],
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)
+                    )
                 ),
-              ),
-            );
-          },
-        );
+                child: Center(
+                  child:  Column(
+
+                    children: <Widget>[
+                      Container(height: 160,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)
+
+                            ),
+                            color: Colors.black12
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 13,),
+                              if(gamingModel.availablity=="Available")...{
+
+                                CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.check,color: Colors.white,),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              }else...{
+                                CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.close,color: Colors.white,),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              },
+
+
+                              SizedBox(height: 12,),
+                              Text('${gaming[radiotittle]} - ${type[radiotittle1]}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text('Month',style: TextStyle(fontSize: 15),),
+                          Text(' ${month}',style: TextStyle1,)
+                        ],
+                      ),
+
+                      Column(
+                        children: [
+                          Text('Time Slot ',style: TextStyle(fontSize: 15),),
+                          Text('${timezone}',style: TextStyle1,)
+                        ],
+                      ),
+
+
+                      Column(
+                        children: [
+                          Text('Fees',style: TextStyle(fontSize: 15),),
+                          Text('${nonmemberfee}',style: TextStyle1,)
+                        ],
+                      ),
+
+
+
+
+                      if(gamingModel.availablity=="Available")...{
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SportDetails(month: "${month}", timeslot: "${timezone}",feesamount: "${nonmemberfee}",orderno: '${orderId.toString()}',)));
+                          },
+                          child: Container(
+                            height: 40,
+                            color: Colors.green,
+                            width: double.infinity,
+                            // margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          ),
+                        )
+                      }
+                      else
+                        Container(
+                          height: 40,
+                          color: Colors.red,
+                          width: double.infinity,
+                          child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                        )
+
+
+
+
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+
+
 
       }else
       {

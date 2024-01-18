@@ -170,18 +170,7 @@ class _LoginState extends State<Login> {
                     Text('Not Registered?'),
                     TextButton(onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterUser()));
-                      // if (Platform.isAndroid || Platform.isIOS) {
-                      //   final appId = Platform.isAndroid ? 'YOUR_ANDROID_PACKAGE_ID' : 'YOUR_IOS_APP_ID';
-                      //   final url = Uri.parse(
-                      //     Platform.isAndroid
-                      //         ? "https://rasclub.org/registration_outsider.html"
-                      //         : "https://rasclub.org/registration_outsider.html",
-                      //   );
-                      //   launchUrl(
-                      //     url,
-                      //     mode: LaunchMode.externalApplication,
-                      //   );
-                      // }
+
                     }, child: Text('Create account',style: TextStyle(
                       color: Colors.pink
                     ),))

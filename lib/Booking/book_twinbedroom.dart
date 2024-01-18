@@ -156,7 +156,9 @@ class _BookTwinBedState extends State<BookTwinBed> {
                     CustomGrayContainer(
                       width:MediaQuery.of(context).size.width/2-20,
                         icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: InkWell(
+                        child: TextFormField(
+                          controller: startdate,
+                          readOnly: true,
                           onTap: () async {
                             setState(() {
                               visiblecalender =!visiblecalender;
@@ -164,56 +166,52 @@ class _BookTwinBedState extends State<BookTwinBed> {
                             });
 
                           },
-                          child: TextFormField(
-                            controller: startdate,
-                            decoration: const InputDecoration(
-                              hintText: "Check-in",
-                              enabled: false,
-                              // hintStyle: KTextStyle.textFieldHintStyle,
-                              border: InputBorder.none,
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(backgroundColor: Colors.white12,
-                                      content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
-                                );
-                              }
-                              return null;
-                            },
+                          decoration: const InputDecoration(
+                            hintText: "Check-in",
+                            enabled: true,
+                            // hintStyle: KTextStyle.textFieldHintStyle,
+                            border: InputBorder.none,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(backgroundColor: Colors.white12,
+                                    content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
+                              );
+                            }
+                            return null;
+                          },
                         )),
                     SizedBox(width: 15,),
                     CustomGrayContainer(
                       width: MediaQuery.of(context).size.width/2-20,
                         icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: InkWell(
+                        child: TextFormField(
+                          controller: enddate,
+                          readOnly: true,
                           onTap: () async {
                             setState(() {
                               visiblecalender =!visiblecalender;
                             });
 
                           },
-                          child: TextFormField(
-                            controller: enddate,
-                            decoration: const InputDecoration(
-                              hintText: "Check-out",
-                              enabled: false,
-                              // hintStyle: KTextStyle.textFieldHintStyle,
-                              border: InputBorder.none,
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-
-                                  const SnackBar(backgroundColor: Colors.white12,
-                                      content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
-                                );
-                              }
-                              return null;
-                            },
+                          decoration: const InputDecoration(
+                            hintText: "Check-out",
+                            enabled: true,
+                            // hintStyle: KTextStyle.textFieldHintStyle,
+                            border: InputBorder.none,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+
+                                const SnackBar(backgroundColor: Colors.white12,
+                                    content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
+                              );
+                            }
+                            return null;
+                          },
                         )),
                   ],
                 ),
@@ -366,156 +364,179 @@ class _BookTwinBedState extends State<BookTwinBed> {
           totalnight =bookkingroomModel.totalNights!.toString();
         });
         // ignore: use_build_context_synchronously
-        showModalBottomSheet<void>(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 420,
+        if(int.parse(totalnight)<6){
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 420,
 
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                  )
-              ),
-              child: Center(
-                child:  Column(
-
-                  children: <Widget>[
-                    Container(height: 160,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)
-
-                          ),
-                          color: Colors.black12
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 13,),
-                            if(bookkingroomModel.availablity=="Available")...{
-
-                              CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.check,color: Colors.green,),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            }else...{
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.close,color: Colors.white,),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            },
-                            SizedBox(height: 12,),
-                            Text(widget.roomtype,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text('Check-in:',style: TextStyle1),
-                                    Text('${startdate.text}',style: TextStyle(fontSize: 15),)
-                                  ],
-                                ),
-                                SizedBox(width: 10,),
-                                Container(width: 2,height: 30,color: Colors.black45,),
-                                SizedBox(width: 10,),
-                                Column(
-                                  children: [
-                                    Text('Check-out:',style: TextStyle1),
-                                    Text('${enddate.text}',style: TextStyle(fontSize: 15),)
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    CommonRow(tittle: 'Total Stay :',requirement: ' ${totalnight}Night',),
-                    CommonRow(tittle: 'Total Rooms :', requirement: ' ${roomnumber.text} Room/s'),
-                    CommonRow(tittle:'Extra Bed Required : ' , requirement: ' ${bedrequired}'),
-                   CommonRow(tittle: 'Booking For : ', requirement: ' ${client}'),
-                    CommonRow(tittle: 'Total Fair : ', requirement: ' ₹ ${totalfare}.00'),
-                    CommonRow(tittle: 'GST @12% : ', requirement: ' ₹ ${totalgst}.00'),
-                    CommonRow(tittle:'Grand Total : ' , requirement: ' ₹ ${grandtotal}.00'),
-
-                    if(bookkingroomModel.availablity=="Available")...{
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookRoomDetails(roomname: 'Twin Bedded Room', checkindate: '${startdate.text}', checkoutdate: '${enddate.text}', Nightstay: '${totalnight}', RoomNumbers: '${roomnumber.text}',bookingfor: '$client',Bedrequired: '${bedrequired}',totalfair: ' ${totalfare}.00',gst:'${totalgst}.00' ,grandtotal:'${grandtotal}.00' ,
-                          )
-                          ));
-                        },
-            //             async{
-            // Razorpay razorpay = Razorpay();
-            // SharedPreferences prefs = await SharedPreferences.getInstance();
-            // String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
-            // String emaildetails = prefs.getString(Constants.EMAIL)!;
-            // // String  = prefs.getString(Constants.MOBILE_NUMBER)!;
-            // var options = {
-            // 'key': 'rzp_live_NalzYyd1d8kTRB',
-            // 'amount':double.parse(grandtotal)*100,
-            //   // 'amount':100,
-            // 'name':'RAS CLUB.',
-            // 'description': 'Room booking',
-            // 'retry': {'enabled': true, 'max_count': 1},
-            // 'send_sms_hash': true,
-            // 'prefill': {'contact': mobileNumber, 'email':
-            // emaildetails,
-            // },
-            // 'external': {
-            // 'wallets': ['paytm']
-            // }
-            // };
-            // razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-            // razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-            // razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-            // razorpay.open(options);
-            //
-            // },
-                        child: Container(
-                          height: 40,
-                          color: Colors.green,
-                          width: double.infinity,
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                        ),
-                      )
-                    }
-                    else
-                    InkWell(
-                      onTap: (){},
-                      child: Container(
-                        height: 40,
-                        color: Colors.red,
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                      ),
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)
                     )
-
-
-
-                  ],
                 ),
-              ),
-            );
-          },
-        );
+                child: Center(
+                  child:  Column(
+
+                    children: <Widget>[
+                      Container(height: 160,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)
+
+                            ),
+                            color: Colors.black12
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 13,),
+                              if(bookkingroomModel.availablity=="Available")...{
+
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.check,color: Colors.green,),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              }else...{
+                                CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.close,color: Colors.white,),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              },
+                              SizedBox(height: 12,),
+                              Text(widget.roomtype,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text('Check-in:',style: TextStyle1),
+                                      Text('${startdate.text}',style: TextStyle(fontSize: 15),)
+                                    ],
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(width: 2,height: 30,color: Colors.black45,),
+                                  SizedBox(width: 10,),
+                                  Column(
+                                    children: [
+                                      Text('Check-out:',style: TextStyle1),
+                                      Text('${enddate.text}',style: TextStyle(fontSize: 15),)
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      CommonRow(tittle: 'Total Stay :',requirement: ' ${totalnight}Night',),
+                      CommonRow(tittle: 'Total Rooms :', requirement: ' ${roomnumber.text} Room/s'),
+                      CommonRow(tittle:'Extra Bed Required : ' , requirement: ' ${bedrequired}'),
+                      CommonRow(tittle: 'Booking For : ', requirement: ' ${client}'),
+                      CommonRow(tittle: 'Total Fair : ', requirement: ' ₹ ${totalfare}.00'),
+                      CommonRow(tittle: 'GST @12% : ', requirement: ' ₹ ${totalgst}.00'),
+                      CommonRow(tittle:'Grand Total : ' , requirement: ' ₹ ${grandtotal}.00'),
+
+                      if(bookkingroomModel.availablity=="Available")...{
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>BookRoomDetails(roomname: 'Twin Bedded Room', checkindate: '${startdate.text}', checkoutdate: '${enddate.text}', Nightstay: '${totalnight}', RoomNumbers: '${roomnumber.text}',bookingfor: '$client',Bedrequired: '${bedrequired}',totalfair: ' ${totalfare}.00',gst:'${totalgst}.00' ,grandtotal:'${grandtotal}.00' ,
+                            )
+                            ));
+                          },
+                          //             async{
+                          // Razorpay razorpay = Razorpay();
+                          // SharedPreferences prefs = await SharedPreferences.getInstance();
+                          // String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
+                          // String emaildetails = prefs.getString(Constants.EMAIL)!;
+                          // // String  = prefs.getString(Constants.MOBILE_NUMBER)!;
+                          // var options = {
+                          // 'key': 'rzp_live_NalzYyd1d8kTRB',
+                          // 'amount':double.parse(grandtotal)*100,
+                          //   // 'amount':100,
+                          // 'name':'RAS CLUB.',
+                          // 'description': 'Room booking',
+                          // 'retry': {'enabled': true, 'max_count': 1},
+                          // 'send_sms_hash': true,
+                          // 'prefill': {'contact': mobileNumber, 'email':
+                          // emaildetails,
+                          // },
+                          // 'external': {
+                          // 'wallets': ['paytm']
+                          // }
+                          // };
+                          // razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+                          // razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+                          // razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+                          // razorpay.open(options);
+                          //
+                          // },
+                          child: Container(
+                            height: 40,
+                            color: Colors.green,
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          ),
+                        )
+                      }
+                      else
+                        InkWell(
+                          onTap: (){},
+                          child: Container(
+                            height: 40,
+                            color: Colors.red,
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          ),
+                        )
+
+
+
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        else
+          await showDialog(
+            context: context,
+            builder: (context) => new AlertDialog(
+              title: new Text('Alert',textAlign: TextAlign.center,),
+              content: Text(
+                'You can make upto 5 nights booking at a time',textAlign: TextAlign.center,style: TextStyle(
+                  fontWeight: FontWeight.bold
+              ),),
+              actions: <Widget>[
+                new TextButton(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .pop(); // dismisses only the dialog and returns nothing
+                  },
+                  child: new Text('OK'),
+                ),
+              ],
+            ),
+          );
+
       }else
       {
         print("dalid");

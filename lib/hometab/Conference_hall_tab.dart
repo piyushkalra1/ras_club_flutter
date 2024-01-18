@@ -10,6 +10,7 @@ import 'package:ras_club_flutter/model/ConferenceHallModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart'as http;
 import '../Booking/book_kingroom.dart';
+import '../const/dialogueerror.dart';
 import 'PARTYHALL/partyhall_booling.dart';
 import '../const/constants.dart';
 import '../const/custom_grey_container.dart';
@@ -41,6 +42,7 @@ class _ConfereceHometabState extends State<ConfereceHometab> {
   @override
   TextEditingController dateOfFunctionController = TextEditingController();
   String timing ="Select Function Time*";
+  String message ="";
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,125 +214,134 @@ class _ConfereceHometabState extends State<ConfereceHometab> {
       print("${prefs.getString(Constants.SALT)}");
       if(response.statusCode==200){
         var data = jsonDecode(response.body);
-        print(data);
-        print(body);
-        var conferencehallbookkingModel =ConferenceHallModel.fromJson(data);
-        print("data convert success");
 
         setState(() {
+          message = data["Message"].toString();
         });
-        // ignore: use_build_context_synchronously
-        showModalBottomSheet<void>(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 280,
+        if( message=="Unauthorized User")    {
+          showDialog(context: context, builder: (BuildContext bc) =>
+              DialogError(errorMsg: '',));
+        }
+     else{
+          var conferencehallbookkingModel =ConferenceHallModel.fromJson(data);
+          print("data convert success");
 
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                  )
-              ),
-              child: Center(
-                child:  Column(
+          setState(() {
+          });
+          // ignore: use_build_context_synchronously
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 280,
 
-                  children: <Widget>[
-                    Container(height: 120,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)
-
-                          ),
-                          color: Colors.black12
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 13,),
-                            if(conferencehallbookkingModel.availablity=="Available")...{
-
-                              CircleAvatar(
-                                backgroundColor: Colors.green,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.check,color: Colors.white,),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            }else...{
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.close,color: Colors.white,),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            },
-
-
-                            Text('Party Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text('Function Date   : ',style: TextStyle(fontSize: 15),),
-                        Text(' ${dateOfFunctionController.text}',style: TextStyle1,)
-                      ],
-                    ),
-
-                    Column(
-                      children: [
-                        Text('Function Time  : ',style: TextStyle(fontSize: 15),),
-                        Text('${timing}',style: TextStyle1,)
-                      ],
-                    ),
-
-
-
-
-
-
-                    if(conferencehallbookkingModel.availablity=="Available")...{
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ConferenceHallBooking( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Conference Hall', conferencehallBookingModel: PartyhallBookingModel.fromJson(data),)));
-
-                        },
-                        child: Container(
-                          height: 40,
-                          color: Colors.green,
-                          width: double.infinity,
-                          // margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                        ),
-                      )
-                    }
-                    else
-                      Container(
-                        height: 40,
-                        color: Colors.red,
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                      )
-
-
-
-
-                  ],
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)
+                    )
                 ),
-              ),
-            );
-          },
-        );
+                child: Center(
+                  child:  Column(
+
+                    children: <Widget>[
+                      Container(height: 120,
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)
+
+                            ),
+                            color: Colors.black12
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 13,),
+                              if(conferencehallbookkingModel.availablity=="Available")...{
+
+                                CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.check,color: Colors.white,),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              }else...{
+                                CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  child: IconButton(
+
+                                    icon: Icon(Icons.close,color: Colors.white,),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              },
+
+
+                              Text('Party Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text('Function Date   : ',style: TextStyle(fontSize: 15),),
+                          Text(' ${dateOfFunctionController.text}',style: TextStyle1,)
+                        ],
+                      ),
+
+                      Column(
+                        children: [
+                          Text('Function Time  : ',style: TextStyle(fontSize: 15),),
+                          Text('${timing}',style: TextStyle1,)
+                        ],
+                      ),
+
+
+
+
+
+
+                      if(conferencehallbookkingModel.availablity=="Available")...{
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ConferenceHallBooking( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Conference Hall', conferencehallBookingModel: PartyhallBookingModel.fromJson(data),)));
+
+                          },
+                          child: Container(
+                            height: 40,
+                            color: Colors.green,
+                            width: double.infinity,
+                            // margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          ),
+                        )
+                      }
+                      else
+                        Container(
+                          height: 40,
+                          color: Colors.red,
+                          width: double.infinity,
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                        )
+
+
+
+
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+
 
       }else
       {

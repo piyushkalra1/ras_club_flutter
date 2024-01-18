@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ras_club_flutter/Booking/book_banquet_hall.dart';
+import 'package:ras_club_flutter/const/dialogueerror.dart';
 import 'package:ras_club_flutter/const/pink_button.dart';
 import 'package:ras_club_flutter/DashBoard/hall_booking.dart';
 import 'package:ras_club_flutter/model/HallBookingModal.dart';
@@ -42,6 +43,7 @@ class _BanquetHallHometabState extends State<BanquetHallHometab> {
   @override
   TextEditingController dateOfFunctionController = TextEditingController();
   String timing ="Select Function Time*";
+  String message ="";
   late final String halltype;
 
   Widget build(BuildContext context) {
@@ -167,8 +169,12 @@ class _BanquetHallHometabState extends State<BanquetHallHometab> {
 
                   }
                   else{
-                    if((validateData()))
-                    HallBookingApi();
+                    if((validateData())){
+                      print("login again");
+                      HallBookingApi();
+
+                    }
+
                   }
 
                 }),
@@ -206,138 +212,144 @@ class _BanquetHallHometabState extends State<BanquetHallHometab> {
 
           body:jsonEncode(body)
       );
-      print("${prefs.getString(Constants.SALT)}");
+      print(response.statusCode);
       if(response.statusCode==200){
-        var data = jsonDecode(response.body);
+
+        var data = jsonDecode(response.body.toString());
         print(data);
-        print(body);
-        var hallbookkingModel =HallBookingModal.fromJson(data);
-        print("data convert success");
-
         setState(() {
-          // timing=hallbookkingModel..toString();
-          // timing =hallbookkingModel.
-          // totalgst =bookkingroomModel. totalGST!.toString();
+          message = data["Message"].toString();
         });
-        showModalBottomSheet<void>(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 280,
-
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                  )
-              ),
-              child: Center(
-                child:  Column(
-
-                  children: <Widget>[
-                    Container(height: 120,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)
-
-                          ),
-                          color: Colors.black12
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 13,),
-                            if(hallbookkingModel.availablity=="Available")...{
-
-                              CircleAvatar(
-                                backgroundColor: Colors.green,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.check,color: Colors.white,),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            }else...{
-                              CircleAvatar(
-                                backgroundColor: Colors.red,
-                                child: IconButton(
-
-                                  icon: Icon(Icons.close,color: Colors.white,),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                            },
+        print("message =>${message}");
+       if( message=="Unauthorized User")    {
+         showDialog(context: context, builder: (BuildContext bc) =>
+             DialogError(errorMsg: '',));
+       }
+      else{
+         var hallbookkingModel =HallBookingModal.fromJson(data);
+         print("data convert success");
 
 
-                            SizedBox(height: 12,),
-                            Text('Banquet Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text('Function Date   : ',style: TextStyle(fontSize: 15),),
-                        Text(' ${dateOfFunctionController.text}',style: TextStyle1,)
-                      ],
-                    ),
+         print("message");
+         print(message.toString());
+         showModalBottomSheet<void>(
+           isScrollControlled: true,
+           context: context,
+           builder: (BuildContext context) {
+             return Container(
+               height: 280,
 
-                    Column(
-                      children: [
-                        Text('Function Time  : ',style: TextStyle(fontSize: 15),),
-                        Text('${timing}',style: TextStyle1,)
-                      ],
-                    ),
+               decoration: const BoxDecoration(
+                   borderRadius: BorderRadius.only(
+                       topLeft: Radius.circular(20),
+                       topRight: Radius.circular(20)
+                   )
+               ),
+               child: Center(
+                 child:  Column(
+
+                   children: <Widget>[
+                     Container(height: 120,
+                       decoration: const BoxDecoration(
+                           borderRadius: BorderRadius.only(
+                               topLeft: Radius.circular(20),
+                               topRight: Radius.circular(20)
+
+                           ),
+                           color: Colors.black12
+                       ),
+                       child: Center(
+                         child: Column(
+                           children: [
+                             SizedBox(height: 13,),
+                             if(hallbookkingModel.availablity=="Available")...{
+
+                               CircleAvatar(
+                                 backgroundColor: Colors.green,
+                                 child: IconButton(
+
+                                   icon: Icon(Icons.check,color: Colors.white,),
+                                   onPressed: () {},
+                                 ),
+                               ),
+                             }else...{
+                               CircleAvatar(
+                                 backgroundColor: Colors.red,
+                                 child: IconButton(
+
+                                   icon: Icon(Icons.close,color: Colors.white,),
+                                   onPressed: () {
+                                     Navigator.pop(context);
+                                   },
+                                 ),
+                               ),
+                             },
 
 
+                             SizedBox(height: 12,),
+                             Text('Banquet Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                           ],
+                         ),
+                       ),
+                     ),
+                     Column(
+                       children: [
+                         Text('Function Date   : ',style: TextStyle(fontSize: 15),),
+                         Text(' ${dateOfFunctionController.text}',style: TextStyle1,)
+                       ],
+                     ),
 
-
-
-
-                    if(hallbookkingModel.availablity=="Available")...{
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookBanquet( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Banquet Hall', hallbookkingModel: HallBookingModal.fromJson(data),)));
-
-                        },
-                        child: Container(
-                          height: 40,
-                          color: Colors.green,
-                          width: double.infinity,
-                          // margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                        ),
-                      )
-                    }
-                    else
-                      Container(
-                        height: 40,
-                        color: Colors.red,
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                      )
+                     Column(
+                       children: [
+                         Text('Function Time  : ',style: TextStyle(fontSize: 15),),
+                         Text('${timing}',style: TextStyle1,)
+                       ],
+                     ),
 
 
 
 
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+
+
+                     if(hallbookkingModel.availablity=="Available")...{
+                       InkWell(
+                         onTap: (){
+                           Navigator.push(context, MaterialPageRoute(builder: (context)=>BookBanquet( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Banquet Hall',
+                             hallbookkingModel: HallBookingModal.fromJson(data),)));
+
+                         },
+                         child: Container(
+                           height: 40,
+                           color: Colors.green,
+                           width: double.infinity,
+                           // margin: EdgeInsets.symmetric(vertical: 8),
+                           child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                         ),
+                       )
+                     }
+                     else
+                       Container(
+                         height: 40,
+                         color: Colors.red,
+                         width: double.infinity,
+                         margin: EdgeInsets.symmetric(vertical: 8),
+                         child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                       )
+
+
+
+
+                   ],
+                 ),
+               ),
+             );
+           },
+         );
+       }
 
       }else
       {
         CircularProgressIndicator();
-        print("dalid");
-        print(response.statusCode.toString());
-        print(body);
       }
     }catch(e){
       print(e.toString());

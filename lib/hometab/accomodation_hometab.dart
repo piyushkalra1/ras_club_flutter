@@ -5,15 +5,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart'as http;
+import 'package:lottie/lottie.dart';
+
 import 'package:ras_club_flutter/Booking/book_kingroom.dart';
 import 'package:ras_club_flutter/Booking/book_twinbedroom.dart';
 import 'package:ras_club_flutter/Booking/luxuryroom_booking.dart';
+import 'package:ras_club_flutter/login/login_screen.dart';
 import 'package:ras_club_flutter/model/RoomRateModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../const/apilistview_horizontal.dart';
-import '../const/pink_button.dart';
-import '../const/static_text.dart';
+import '../const/dialogueerror.dart';
 import '../const/tv_wifi.dart';
 import '../const/constants.dart';
 
@@ -47,6 +49,7 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
   String kingsizeroomprice="";
   String twinbeddedroomprice="";
   String luxurysuiteprice="";
+  String message ="";
 
 
   @override
@@ -74,12 +77,6 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
               bottomRight: Radius.circular(18),bottomLeft: Radius.circular(18)
               ),
 
-              // padding: EdgeInsets.all(5),
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.circular(30),
-              //   border: Border.all(width: 2,color: Colors.black)
-              //
-              // ),
               child: CarouselSlider(
                 options: CarouselOptions(
                     height: 300.0,
@@ -142,12 +139,25 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
                         'assets/images/kingsizeroom_3.jpg',
                       ), text1: '25-35 Sq. Ft. Area',text2: "Sofa and Table",
                         rate:"${kingsizeroomprice}", ontap:(){
+                        if(message=="Unauthorized User"){
+                          showDialog(context: context, builder: (BuildContext bc) =>
+                              DialogError(errorMsg: '',));
+
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowAlertDialogue()));
+                        // showLoginAlertDialog(context);
+                        }
+                        else
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>BookKingRoom(roomtype: 'King Size Room',)));
                         } , ),
                       ApiListviewHorizontal(tittle: 'Twin Bedded Room',thumbnail: AssetImage(
                         'assets/images/twinbeddedroom_1.jpg',
                       ),text1: '35-45 Sq. Ft. Area',text2: "Toiletries",
                         rate:twinbeddedroomprice, ontap: (){
+                          if(message=="Unauthorized User"){
+
+                            showDialog(context: context, builder: (BuildContext bc) =>
+                                DialogError(errorMsg: '',));
+                          }else
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>BookTwinBed(roomtype: 'Twin Bedded Room',)));
 
                         },
@@ -156,6 +166,11 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
                         'assets/images/luxurysuiteroom_5.jpg',
                       ),text1: '45-50 Sq. Ft. Area',text2: "Sofa and Table",
                         rate: luxurysuiteprice, ontap: (){
+                          if(message=="Unauthorized User"){
+
+                            showDialog(context: context, builder: (BuildContext bc) =>
+                                DialogError(errorMsg: '',));
+                          }else
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>LuxuryRoomBooking(roomtype: 'Luxury Suite',)));
 
                         },
@@ -170,6 +185,7 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
       ),
     );
   }
+
   void AccomodationApi ( ) async{
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -195,6 +211,7 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
         print(data);
        var roomRateModel =RoomRateModel.fromJson(data);
        setState(() {
+         message= data["Message"].toString();
          kingsizeroomprice=roomRateModel.rateKingSizeRoom! +" /Night";
          luxurysuiteprice =roomRateModel.rateLuxurySuite!+" /Night";
          twinbeddedroomprice =roomRateModel.rateTwinBeddedRoom!+" /Night";

@@ -316,10 +316,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -336,6 +336,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: "1f0ce68112072d66ea271a9841994fa8d16442e23d8cf8996c9fa74174e58b4e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   matcher:
     dependency: transitive
     description:
@@ -721,18 +729,18 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: ab3eac31638e80663eae19c71e362012e1e2f67dfd527dc5c07d9397cd4238f2
+      sha256: "69c827931957d5b121ee9f0b9b0b8d7d0d1ac537b61bcdd5c3fbffc044bbe86e"
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.53"
+    version: "24.1.41"
   syncfusion_flutter_datepicker:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_datepicker
-      sha256: "3053db34fa62d35d45f99b6b03a91c0042a16e5605a2d20c0cc5032ca1c971f8"
+      sha256: "13c48582dc911663eac286791f009474fae964a731dc719d86ba0de8d8ade6f0"
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.53"
+    version: "24.1.41"
   term_glyph:
     dependency: transitive
     description:
@@ -918,5 +926,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=3.2.0-194.0.dev <3.7.12"
-  flutter: ">=3.7.0"
+  dart: ">=3.2.0 <3.7.12"
+  flutter: ">=3.16.0"

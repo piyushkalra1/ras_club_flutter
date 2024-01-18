@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Booking/book_kingroom.dart';
 import '../const/customstatic_dropdown.dart';
+import '../const/dialogueerror.dart';
 import '../const/image_list.dart';
 import '../const/pink_button.dart';
 import '../utils.dart';
@@ -36,9 +37,8 @@ class _GymHometabState extends State<GymHometab> {
   int ptrequirementindex =-1;
   List<String>duration =['1 Day','1 Month','3 Months' , '6 Months' , '12 Months' , '12 Months for Couple'];
   List<String> ptduration =['Not Required','1 Month','3 Months' , '6 Months' , '12 Months'  ];
-  
   List<String> ptrequirement = ['Not Required', 'Regular' , 'Alternate'];
-
+  String message ="";
 
 
 
@@ -222,117 +222,125 @@ class _GymHometabState extends State<GymHometab> {
       print("${prefs.getString(Constants.SALT)}");
       if(response.statusCode==200){
         var data = jsonDecode(response.body);
-        print(data);
-        print(body);
-        var gymfeemodel =GymModel.fromJson(data);
-        print("data convert success");
-        print(response);
+
         setState(() {
-
-          ptfees =gymfeemodel.pTFees.toString();
-          gymfees =gymfeemodel.gymFees.toString();
-          tottalfees =gymfeemodel.totalFees.toString();
+          message = data["Message"].toString();
         });
+        if( message=="Unauthorized User")    {
+          showDialog(context: context, builder: (BuildContext bc) =>
+              DialogError(errorMsg: '',));
+        }
+        else{
+          var gymfeemodel =GymModel.fromJson(data);
+          print("data convert success");
+          print(response);
+          setState(() {
 
-        // ignore: use_build_context_synchronously
-        showModalBottomSheet<void>(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 245,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)
-                  )
-              ),
-              child: Center(
-                child:  Column(
+            ptfees =gymfeemodel.pTFees.toString();
+            gymfees =gymfeemodel.gymFees.toString();
+            tottalfees =gymfeemodel.totalFees.toString();
+          });
 
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)
-                          ),
-
-                          color: Colors.black12
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: [
-
-                            Text('Gym Prices',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text(' Duration  ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500)),
-                        Text(' ${duration[durationindex]}',style: TextStyle(fontSize: 20,fontWeight:FontWeight.w700),)
-                      ],
-                    ),
-
-                    Column(
-                      children: [
-                        Text('Personal Trainer ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
-                        Text('${ptrequirement[ptrequirementindex]}',style: TextStyle1,)
-                      ],
-                    ),
-
-                    Column(
-                      children: [
-                        Text('Total Fees  ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
-                        Text(tottalfees,style: TextStyle1,)
-                      ],
-                    ),
-
-
-
-
-
-
-                    if(gymfeemodel.message=="Valid User")...{
-                      InkWell(
-                        onTap: (){
-                          print(orderId);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>GymBookingDetails(duration: duration[durationindex], trainer: ptrequirement![ptrequirementindex], pttime: ptduration![ptdurationindex], fees: double.parse(tottalfees) ,orderid: orderId,
-
-                          )));
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>ConferenceHallBooking( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Conference Hall', conferencehallBookingModel: PartyhallBookingModel.fromJson(data),)));
-
-                        },
-                        child: Container(
-                          height: 40,
-                          color: Colors.green,
-                          width: double.infinity,
-                          // margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                        ),
-                      )
-                    }
-                    else
-                      Container(
-                        height: 40,
-                        color: Colors.red,
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
-                      )
-
-
-
-
-                  ],
+          // ignore: use_build_context_synchronously
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 245,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)
+                    )
                 ),
-              ),
-            );
-          },
-        );
+                child: Center(
+                  child:  Column(
+
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)
+                            ),
+
+                            color: Colors.black12
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+
+                              Text('Gym Prices',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text(' Duration  ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500)),
+                          Text(' ${duration[durationindex]}',style: TextStyle(fontSize: 20,fontWeight:FontWeight.w700),)
+                        ],
+                      ),
+
+                      Column(
+                        children: [
+                          Text('Personal Trainer ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                          Text('${ptrequirement[ptrequirementindex]}',style: TextStyle1,)
+                        ],
+                      ),
+
+                      Column(
+                        children: [
+                          Text('Total Fees  ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                          Text(tottalfees,style: TextStyle1,)
+                        ],
+                      ),
+
+
+
+
+
+
+                      if(gymfeemodel.message=="Valid User")...{
+                        InkWell(
+                          onTap: (){
+                            print(orderId);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>GymBookingDetails(duration: duration[durationindex], trainer: ptrequirement![ptrequirementindex], pttime: ptduration![ptdurationindex], fees: double.parse(tottalfees) ,orderid: orderId,
+
+                            )));
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>ConferenceHallBooking( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Conference Hall', conferencehallBookingModel: PartyhallBookingModel.fromJson(data),)));
+
+                          },
+                          child: Container(
+                            height: 40,
+                            color: Colors.green,
+                            width: double.infinity,
+                            // margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Center(child: Text('Book Now',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          ),
+                        )
+                      }
+                      else
+                        Container(
+                          height: 40,
+                          color: Colors.red,
+                          width: double.infinity,
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                        )
+
+
+
+
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
 
       }else
       {
