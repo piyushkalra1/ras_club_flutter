@@ -59,7 +59,8 @@ class _HallBookingState extends State<HallBooking> {
                                 children: [
                                   Text('${widget.data.hallbookings![index].hallType}',style: TextStyle1,),
                                   Spacer(),
-                                  Text('Expired'),
+                                  Text(widget.data.hallbookings![index].status.toString()),
+                                  SizedBox(width: 5,),
                                   if(widget.data.hallbookings![index].status== 'Expired')...{
                                     Icon(Icons.circle,color: Colors.red,size: 12,)
                                   }else
@@ -79,7 +80,7 @@ class _HallBookingState extends State<HallBooking> {
                                   Text('Function date:',style: TextStyle2),
                                   Text('${widget.data.hallbookings![index].fdate}',style: TextStyle(fontSize: 15),),
                                   SizedBox(height: 12,),
-                                  Text('Function Timw:',style: TextStyle2),
+                                  Text('Function Time:',style: TextStyle2),
                                   Text('${widget.data.hallbookings![index].ftime}',style: TextStyle(fontSize: 15),),
 
 

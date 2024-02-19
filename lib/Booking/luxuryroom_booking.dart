@@ -57,6 +57,22 @@ class _LuxuryRoomBookingState extends State<LuxuryRoomBooking> {
   late int difference;
 
   final _formKey = GlobalKey<FormState>();
+  void showPicker(int value) async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+
+        lastDate: DateTime.now().add(Duration(days: 365))
+    );
+    if (pickedDate != null) {
+      if(value==1)
+        startdate.text =
+            DateFormat("dd-MM-yyyy").format(pickedDate);
+      else
+        enddate.text =DateFormat("dd-MM-yyyy").format(pickedDate);
+    }
+  }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
 
@@ -101,213 +117,229 @@ class _LuxuryRoomBookingState extends State<LuxuryRoomBooking> {
     return Form(
       key: _formKey,
       child: Scaffold(
+
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,centerTitle: false,
           title: Text(widget.roomtype ),
         ),
-        body: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(topRight:Radius.circular(18) ,topLeft: Radius.circular(18),
-                    bottomRight: Radius.circular(18),bottomLeft: Radius.circular(18)
-                ),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                      height: 290.0,
-                      autoPlay: true,
-                      viewportFraction: 1,
-                      onPageChanged: (index, reason) {
-                        // setState(() {
-                        //   incrementIndex();
-                        // });
-                      }),
-                  items: [0, 1, 2,3,4,5,6,].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return
-                          Image.asset(
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: (){
+            FocusScope.of(context).unfocus();
+          },
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(topRight:Radius.circular(18) ,topLeft: Radius.circular(18),
+                      bottomRight: Radius.circular(18),bottomLeft: Radius.circular(18)
+                  ),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                        height: 290.0,
+                        autoPlay: true,
+                        viewportFraction: 1,
+                        onPageChanged: (index, reason) {
+                          // setState(() {
+                          //   incrementIndex();
+                          // });
+                        }),
+                    items: [0, 1, 2,3,4,5,6,].map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return
+                            Image.asset(
 
-                            twinbedroomimgList[i],
-                            fit: BoxFit.fill,
-                          );
+                              twinbedroomimgList[i],
+                              fit: BoxFit.fill,
+                            );
 
-                      },
-                    );
-                  }).toList(),
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-            ),
-            Center(child: Text('Make Your Room Reservation',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              Center(child: Text('Make Your Room Reservation',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 
 
-                Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    CustomGrayContainer(
-                      width: MediaQuery.of(context).size.width/2-20,
-                        icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: TextFormField(
-                          controller: startdate,
-                          readOnly: true,
-                          onTap: () async {
-                            setState(() {
-                              visiblecalender =!visiblecalender;
-                              Text("${_selectedDate}");
-                            });
-
-                          },
-                          decoration: const InputDecoration(
-                            hintText: "Check-in",
-                            enabled: true,
-                            // hintStyle: KTextStyle.textFieldHintStyle,
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-
-                                const SnackBar(backgroundColor: Colors.white12,
-                                    content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
-                              );
-                            }
-                            return null;
-                          },
-                        )),
-                    SizedBox(width: 15,),
-                    CustomGrayContainer(
-                      width: MediaQuery.of(context).size.width/2-20,
-                        icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: TextFormField(
-                          controller: enddate,
-                          onTap: () async {
-                            setState(() {
-                              visiblecalender =!visiblecalender;
-                            });
-
-                          },
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            hintText: "Check-out",
-                            enabled: true,
-                            // hintStyle: KTextStyle.textFieldHintStyle,
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-
-                                const SnackBar(backgroundColor: Colors.white12,
-                                    content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
-                              );
-                            }
-                            return null;
-                          },
-                        )),
-                  ],
-                ),
-
-                Visibility(
-                  visible: visiblecalender,
-                  child: Stack(
+                  Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30),
-                        child: SfDateRangePicker(
-                          minDate: DateTime.now(),
-                          onSelectionChanged: _onSelectionChanged,
-                          selectionMode: DateRangePickerSelectionMode.range,
-                          initialSelectedRange: PickerDateRange(
-                              DateTime.now(),
-                              DateTime.now().add(Duration(days: 1))),
-                        ),
-                      ),
-                      Positioned(
-                          right: 10,
-                          child: IconButton(icon: Icon(Icons.close),onPressed: (){
-                            setState(() {
-                              visiblecalender=false;
-                            });
-                          },))
+                      SizedBox(width: 10,),
+                      CustomGrayContainer(
+                        width: MediaQuery.of(context).size.width/2-20,
+                          icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
+                          child: TextFormField(
+                            controller: startdate,
+                            readOnly: true,
+                            onTap: ()  {
+                              showPicker(1);
+                              // setState(() {
+                              //   visiblecalender =!visiblecalender;
+                              //   Text("${_selectedDate}");
+                              // });
+
+                            },
+                            decoration: const InputDecoration(
+                              hintText: "Check-in",
+                              enabled: true,
+                              // hintStyle: KTextStyle.textFieldHintStyle,
+                              border: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+
+                                  const SnackBar(backgroundColor: Colors.white12,
+                                      content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
+                                );
+                              }
+                              return null;
+                            },
+                          )),
+                      SizedBox(width: 15,),
+                      CustomGrayContainer(
+                        width: MediaQuery.of(context).size.width/2-20,
+                          icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
+                          child: TextFormField(
+                            controller: enddate,
+                            onTap: ()  {
+                              showPicker(2);
+                              // setState(() {
+                              //   visiblecalender =!visiblecalender;
+                              // });
+
+                            },
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              hintText: "Check-out",
+                              enabled: true,
+                              // hintStyle: KTextStyle.textFieldHintStyle,
+                              border: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+
+                                  const SnackBar(backgroundColor: Colors.white12,
+                                      content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
+                                );
+                              }
+                              return null;
+                            },
+                          )),
                     ],
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: roomnumber,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter no.of.rooms',
-                      border: OutlineInputBorder(
+
+                  Visibility(
+                    visible: visiblecalender,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: SfDateRangePicker(
+                            minDate: DateTime.now(),
+                            onSelectionChanged: _onSelectionChanged,
+                            selectionMode: DateRangePickerSelectionMode.range,
+                            initialSelectedRange: PickerDateRange(
+                                DateTime.now(),
+                                DateTime.now().add(Duration(days: 1))),
+                          ),
+                        ),
+                        Positioned(
+                            right: 10,
+                            child: IconButton(icon: Icon(Icons.close),onPressed: (){
+                              setState(() {
+                                visiblecalender=false;
+                              });
+                            },))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: roomnumber,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter no.of.rooms',
+                        border: OutlineInputBorder(
+
+                        ),
 
                       ),
-
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter room number';
+                        }else if (int.parse(value) < 1 || int.parse(value) > 20){
+                          return 'We have only 20 luxury room pls fill less';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter room number';
-                      }else if (int.parse(value) < 1 || int.parse(value) > 20){
-                        return 'We have only 20 luxury room pls fill less';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(12),
-                  child: CustomStaticDropdown(items: const ['Extra Bed Required*',
-                    'No',
-                    'Yes'
-                  ], onItemSelected: (String? value) {
+                  Container(
+                    margin: EdgeInsets.all(12),
+                    child: CustomStaticDropdown(items: const ['Extra Bed Required*',
+                      'No',
+                      'Yes'
+                    ], onItemSelected: (String? value) {
 
-                    setState(() {
-                      value.toString();
-                      bedrequired =value.toString();
-                    });
-                  },),
-                ),
-                Container(
-                  margin: EdgeInsets.all(12),
-                  child: CustomStaticDropdown(items: const ['Booking For*',
-                    'Self','Spouse','Son','Daughter','Father','Mother','Guest'
+                      setState(() {
+                        value.toString();
+                        bedrequired =value.toString();
+                      });
+                    },),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(12),
+                    child: CustomStaticDropdown(items: const ['Booking For*',
+                      'Self','Spouse','Son','Daughter','Father','Mother','Guest'
 
-                  ], onItemSelected: (String? value) {
-                    setState(() {
-                      value.toString();
-                      client =value.toString();
-                    });
-                  },),
-                ),
+                    ], onItemSelected: (String? value) {
+                      setState(() {
+                        value.toString();
+                        client =value.toString();
+                      });
+                    },),
+                  ),
 
-                PinkButton(ontap: () {
-    if (_formKey.currentState!.validate()) {
-    if(client=='Booking For*'){
-    Utils.showToast('please select booking for');
-    return;
-    }else if(bedrequired =='Extra Bed Required*'){
-    Utils.showToast('please select bed requirement');
-    }else{
-                    BookKingRoomApi();
+                  PinkButton(ontap: () {
+              if (_formKey.currentState!.validate()) {
+              if(client=='Booking For*'){
+              Utils.showToast('please select booking for');
+              return;
+              }else if(bedrequired =='Extra Bed Required*'){
+              Utils.showToast('please select bed requirement');
+              }
+              else{
+                DateTime tempDate = new DateFormat("dd-MM-yyyy").parse(startdate.text);
+                DateTime tempDate2 = new DateFormat("dd-MM-yyyy").parse(enddate.text);
+                difference = tempDate2.difference(tempDate).inDays;
+                if(difference<=0){
+          Utils.showToast('Checkout date must be greater than checkin date');
 
-                  };};}, text: 'Check Availability',),
-                SizedBox(height: 30,)
+                }else
+          BookKingRoomApi();
+              };};}, text: 'Check Availability',),
+                  SizedBox(height: 30,)
 
 
 
-              ],
-            ),
+                ],
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -343,15 +375,14 @@ class _LuxuryRoomBookingState extends State<LuxuryRoomBooking> {
 
           body:jsonEncode(body)
       );
+      print(body.toString());
+      print(response.toString());
       if(response.statusCode==200){
         var data = jsonDecode(response.body);
         print(data);
-        print(difference);
-        print(body);
-
         var bookkingroomModel =BookKingRoomModel.fromJson(data);
         print("data convert success");
-        print(difference);
+
         setState(() {
 
           totalfare=bookkingroomModel.totalFair.toString();
@@ -459,37 +490,12 @@ class _LuxuryRoomBookingState extends State<LuxuryRoomBooking> {
                       if(bookkingroomModel.availablity=="Available")...{
                         InkWell(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>BookRoomDetails(roomname: 'Luxury Room', checkindate: '${startdate.text}', checkoutdate: '${enddate.text}', Nightstay: '${totalnight}', RoomNumbers: '${roomnumber.text}',bookingfor: '$client',Bedrequired: '${bedrequired}',totalfair: ' ${totalfare}.00',gst:'${totalgst}.00' ,grandtotal:'${grandtotal}.00' ,
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>BookRoomDetails(roomname: widget.roomtype,
+                              checkindate: '${startdate.text}', checkoutdate: '${enddate.text}', Nightstay: '${totalnight}', RoomNumbers: '${roomnumber.text}',bookingfor: '$client',Bedrequired: '${bedrequired}',totalfair: ' ${totalfare}.00',gst:'${totalgst}.00' ,grandtotal:'${grandtotal}.00' ,
                             )
                             ));
                           },
-                          // async{
-                          //   Razorpay razorpay = Razorpay();
-                          //   SharedPreferences prefs = await SharedPreferences.getInstance();
-                          //   String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
-                          //   String emaildetails = prefs.getString(Constants.EMAIL)!;
-                          //   // String  = prefs.getString(Constants.MOBILE_NUMBER)!;
-                          //   var options = {
-                          //     'key': 'rzp_live_NalzYyd1d8kTRB',
-                          //     'amount':double.parse(grandtotal)*100,
-                          //     // 'amount':100,,
-                          //     'name':'RAS CLUB.',
-                          //     'description': 'Room booking',
-                          //     'retry': {'enabled': true, 'max_count': 1},
-                          //     'send_sms_hash': true,
-                          //     'prefill': {'contact': mobileNumber, 'email':
-                          //     emaildetails,
-                          //     },
-                          //     'external': {
-                          //       'wallets': ['paytm']
-                          //     }
-                          //   };
-                          //   razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-                          //   razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-                          //   razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-                          //   razorpay.open(options);
-                          //
-                          // },
+
                           child: Container(
                             height: 40,
                             color: Colors.green,
@@ -551,168 +557,17 @@ class _LuxuryRoomBookingState extends State<LuxuryRoomBooking> {
         print(response.statusCode.toString());
         print(body);
       }
-    }catch(e){
+    }catch(e,s){
+      print(s);
       print(e.toString());
     }
   }
-void _handlePaymentSuccess(PaymentSuccessResponse response) {
-  // getPaymentStatus(response.paymentId);
-  print(response.signature);
-
-  setState(() {
-
-  });
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
-
-  SavePaymentRoom(response.paymentId,response.signature);
-}
-
-void _handlePaymentError(PaymentFailureResponse response) {
-  print("Error while making payment   ${response.message}");
-  print("Error while making payment   ${response.code}");
-  print("Error while making payment   ${response.error}");
-  print("Error while making payment   ${response.toString()}");
-  
-  setState(() {
-    isloading = false;
-  });
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
-
-  Fluttertoast.showToast(
-      msg: "Payment Failed",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.redAccent,
-      textColor: Colors.white,
-      fontSize: 16.0
-  );
-}
-
-void _handleExternalWallet(ExternalWalletResponse response) {
-  // Do something when an external wallet is selected
-
-  print(response.walletName);
-}
 
 
-Future<void> getPaymentStatus(String? paymentId) async {
-  if(paymentId == null)
-  {
-    return;
-  }
-  const url = "https://api.rasclub.org/savePaymentForRooms.php";
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
-  String name = prefs.getString(Constants.USER_NAME)!;
-  String email = prefs.getString(Constants.EMAIL )!;
-  String token = prefs.getString(Constants.SALT)!;
-  Map<String, String> body = {
-    "name": name,
-    "mobile": mobileNumber,
-    "email":email,
-
-    "payment_id":paymentId,
-    "deviceId": Utils.deviceId??"",
-    "refreshToken": "sgsghdsvdhjsd",
-    "hardwareDetails": Utils.deviceData??"",
-  };
-  print(token);
-  var headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json",
-    "User-Agent": "okhttp/3.10.0",
-    'Authorization': 'Bearer $token',
-  };
-
-  var response = await http.post(Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(body),
-      encoding: Encoding.getByName("utf-8"));
-  Map<String, dynamic> responseData = json.decode(response.body);
-  if (responseData['status'] == '200' &&
-      responseData["response"] == 'payment details successfully updated') {
-    Fluttertoast.showToast(
-        msg: "Payment Successful",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    if(!mounted) return;
-    // getMembers();
-
-  }
-}
-
-void SavePaymentRoom (String? paymentId, String? signature) async{
-    Random rand = new Random();
-    int rand_int1 = rand.nextInt(1000000);
-    String orderId = "Order #RZP"+rand_int1.toString();
-    try{
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var body ={
-        "mobile":prefs.getString(Constants.MOBILE_NUMBER),
-        "member_type":prefs.getString(Constants.MEMBER_Type),
-        "deviceId": "4E8EB26C-9143-49ED-B415-B67EE16A9E2F",
-        "refreshToken":"sgsghdsvdhjsd",
-        "hardwareDetails":"",
-        "name":
-        prefs.getString(Constants.USER_NAME),
-        "membership_no": prefs.getString(Constants.MEMVERSHIP_NO),
-        "email": prefs.getString(Constants.EMAIL),
-        "payment_id": paymentId,
-        "signature_hash":signature,
-
-        "order_id": orderId,
-        "room_type": widget.roomtype,
-        "checkin": '${startdate.text}',
-        "checkout": '${enddate.text}',
-        "no_of_rooms": '${roomnumber.text}',
-        "total_nights": '${totalnight}',
-        "extra_bed": '${bedrequired}',
-        "booking_for": '${client}',
-        "total_fair": ' ${totalfare}.00',
-        "total_gst": ' ${totalgst}.00',
-        "grand_total":' ${grandtotal}.00'
 
 
-      };
-      print(body);
-      Response response =await http.post(Uri.parse('https://api.rasclub.org/savePaymentForRooms.php'),
-          headers: {
-            "Accept": "application/json",
-            "User-Agent":"okhttp/3.10.0",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer ${prefs.getString(Constants.SALT)}"
-          },
 
-          body:jsonEncode(body)
-      );
-      print("${prefs.getString(Constants.SALT)}");
-      if(response.statusCode==200){
-        var data = jsonDecode(response.body);
-        print(data);
-        print(body);
-        print("data convert success");
-        print(response);
-        setState(() {
 
-        });
-
-      }else
-      {
-        CircularProgressIndicator();
-        print("dalid");
-        print(response.statusCode.toString());
-        print(body);
-      }
-    }catch(e){
-      print(e.toString());
-    }
-  }
 }
 
 const TextStyle1=TextStyle(fontSize: 20,fontWeight: FontWeight.bold);

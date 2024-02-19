@@ -59,8 +59,7 @@ dependencies:
   screen_loader: ^4.0.1
   flutter_overlay_loader: ^2.0.0
   app_version_update: ^4.0.1
-
-
+  package_info_plus: ^4.0.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.12.0

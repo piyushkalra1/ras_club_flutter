@@ -69,6 +69,10 @@ class _BookKingRoomState extends State<BookKingRoom> {
   DateTime checkindate =DateTime.now();
   DateTime checkoutdate =DateTime.now();
   late int difference;
+  TextEditingController _checkindate = TextEditingController();
+  TextEditingController _checkoutdate = TextEditingController();
+
+  int selectedSlotTimeIndex = -1;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -105,9 +109,25 @@ class _BookKingRoomState extends State<BookKingRoom> {
     // return null if the text is valid
     return null;
   }
+  void showPicker(int value) async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+
+        lastDate: DateTime.now().add(Duration(days: 365))
+    );
+
+    if (pickedDate != null) {
+      if(value==1)
+      startdate.text =
+          DateFormat("dd-MM-yyyy").format(pickedDate);
+      else
+        enddate.text =DateFormat("dd-MM-yyyy").format(pickedDate);
+    }
+  }
 
   @override
-  TextEditingController dateOfFunctionController = TextEditingController();
   Widget build(BuildContext context) {
     return  Form(
       key: _formKey,
@@ -117,214 +137,231 @@ class _BookKingRoomState extends State<BookKingRoom> {
           elevation: 0,centerTitle: false,
           title: Text(widget.roomtype),
         ),
-        body: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.all(10),
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: (){
+            FocusScope.of(context).unfocus();
+          },
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.all(10),
 
 
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(topRight:Radius.circular(18) ,topLeft: Radius.circular(18),
-                    bottomRight: Radius.circular(18),bottomLeft: Radius.circular(18)
-                ),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                      height: 300.0,
-                      autoPlay: true,
-                      viewportFraction: 1,
-                      onPageChanged: (index, reason) {
-                        // setState(() {
-                        //   incrementIndex();
-                        // });
-                      }),
-                  items: [0, 1, 2,3,4,5,6,].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return
-                          Image.asset(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(topRight:Radius.circular(18) ,topLeft: Radius.circular(18),
+                      bottomRight: Radius.circular(18),bottomLeft: Radius.circular(18)
+                  ),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                        height: 300.0,
+                        autoPlay: true,
+                        viewportFraction: 1,
+                        onPageChanged: (index, reason) {
+                          // setState(() {
+                          //   incrementIndex();
+                          // });
+                        }),
+                    items: [0, 1, 2,3,4,5,6,].map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return
+                            Image.asset(
 
-                            imgList[i],
-                            fit: BoxFit.fill,
-                          );
-                      },
-                    );
-                  }).toList(),
+                              imgList[i],
+                              fit: BoxFit.fill,
+                            );
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-            ),
-            Center(child: Text('Make Your Room Reservation',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              Center(child: Text('Make Your Room Reservation',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 
-
-                Row(
-                  children: [
-                    SizedBox(width: 10,),
-                    CustomGrayContainer(
-                      width: MediaQuery.of(context).size.width/2-20,
-                        icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: TextFormField(
-                            controller: startdate, readOnly:true,
-                            onTap:()async {
-                              setState(() {
-                                visiblecalender =!visiblecalender;
-                                Text("${_selectedDate}");
-                              });
-
-                            },
-                            decoration: const InputDecoration(
-                              hintText: "Check-in",
-                              enabled: true,
-
-
-
-
-                              // hintStyle: KTextStyle.textFieldHintStyle,
-                              border: InputBorder.none,
-                            ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-
-                                const SnackBar(backgroundColor: Colors.white12,
-                                    content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
-                              );
-                            }
-                            return null;
-                          },
-                        )),
-                    SizedBox(width: 15,),
-                    CustomGrayContainer(
-                      width: MediaQuery.of(context).size.width/2-20,
-                        icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
-                        child: TextFormField(
-                            controller: enddate,
-                            readOnly: true,
-                            onTap: () async {
-                              setState(() {
-                                visiblecalender =!visiblecalender;
-                              });
-
-                            },
-                            decoration: const InputDecoration(
-                              hintText: "Check-out",
-                              enabled: true,
-                              // hintStyle: KTextStyle.textFieldHintStyle,
-                              border: InputBorder.none,
-                            ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-
-                                const SnackBar(backgroundColor: Colors.white12,
-                                    content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
-                              );
-                            }
-                            return null;
-                          },
-                        )),
-                  ],
-                ),
-
-                Visibility(
-                  visible: visiblecalender,
-                  child: Stack(
+                  Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30),
-                        child: SfDateRangePicker(
-                          minDate: DateTime.now(),
-                          onSelectionChanged: _onSelectionChanged,
-                          selectionMode: DateRangePickerSelectionMode.range,
-                          initialSelectedRange: PickerDateRange(
+                      SizedBox(width: 10,),
+                      CustomGrayContainer(
+                        width: MediaQuery.of(context).size.width/2-20,
+                          icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
+                          child: TextFormField(
+                              controller: startdate, readOnly:true,
+                              onTap:() {
+                                // setState(() {
+                                //   visiblecalender =!visiblecalender;
+                                //   Text("${_selectedDate}");
+                                // });
+                                showPicker(1);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Check-in",
+                                enabled: true,
 
-                              DateTime.now(),
-                              DateTime.now().add(Duration(days: 1))),
-                        ),
-                      ),
-                      Positioned(
-                        right: 10,
-                          child: IconButton(icon: Icon(Icons.close),onPressed: (){
-                            setState(() {
-                              visiblecalender=false;
-                            });
-                          },))
+
+
+
+                                // hintStyle: KTextStyle.textFieldHintStyle,
+                                border: InputBorder.none,
+                              ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+
+                                  const SnackBar(backgroundColor: Colors.white12,
+                                      content: Text('Please enter check-in',style: TextStyle(color: Colors.red),)),
+                                );
+                              }
+                              return null;
+                            },
+                          )),
+                      SizedBox(width: 15,),
+                      CustomGrayContainer(
+                        width: MediaQuery.of(context).size.width/2-20,
+                          icon: Icon(Icons.calendar_month_outlined,color: Colors.pink,),
+                          child: TextFormField(
+                              controller: enddate,
+                              readOnly: true,
+
+                              onTap: ()
+                               {
+                                // setState(() {
+                                //   visiblecalender =!visiblecalender;
+                                // });
+                                showPicker(2);
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Check-out",
+                                enabled: true,
+
+                                // hintStyle: KTextStyle.textFieldHintStyle,
+                                border: InputBorder.none,
+                              ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+
+                                  const SnackBar(backgroundColor: Colors.white12,
+                                      content: Text('Please enter CHeck-out',style: TextStyle(color: Colors.red),)),
+                                );
+                              }
+                              return null;
+                            },
+                          )),
                     ],
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: roomnumber,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter no.of.rooms',
-                      border: OutlineInputBorder(
+
+                  Visibility(
+                    visible: visiblecalender,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: SfDateRangePicker(
+                            minDate: DateTime.now(),
+                            onSelectionChanged: _onSelectionChanged,
+                            selectionMode: DateRangePickerSelectionMode.range,
+                            initialSelectedRange: PickerDateRange(
+
+                                DateTime.now(),
+                                DateTime.now().add(Duration(days: 1))),
+                          ),
+                        ),
+                        Positioned(
+                          right: 10,
+                            child: IconButton(icon: Icon(Icons.close),onPressed: (){
+                              setState(() {
+                                visiblecalender=false;
+                              });
+                            },))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: roomnumber,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter no.of.rooms',
+                        border: OutlineInputBorder(
+
+                        ),
 
                       ),
-
-                    ),
-                      validator: (value) {
-                if (value == null || value.isEmpty) {
-                return 'Please enter room number';
-                }else if (int.parse(value) < 1 || int.parse(value) > 20){
-                  return 'We have only 20 King size room pls fill less';
-                }
-                return null;
-                },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(12),
-                  child: CustomStaticDropdown(items: const ['Extra Bed Required*',
-                    'No',
-                    'Yes'
-                  ], onItemSelected: (String? value) {
-
-                    setState(() {
-                      value.toString();
-                      bedrequired =value.toString();
-                    });
-                  },),
-                ),
-                Container(
-                  margin: EdgeInsets.all(12),
-                  child: CustomStaticDropdown(items: const ['Booking For*',
-                    'Self','Spouse','Son','Daughter','Father','Mother','Guest'
-
-                  ], onItemSelected: (String? value) {
-                    setState(() {
-                      value.toString();
-                      client =value.toString();
-                    });
-                  },),
-                ),
-
-                PinkButton(text: "Check  Availability",ontap: () {
-                  if (_formKey.currentState!.validate()) {
-                    if(client=='Booking For*'){
-                      Utils.showToast('please select booking for');
-                      return;
-                    }else if(bedrequired =='Extra Bed Required*'){
-                      Utils.showToast('please select bed requirement');
-                    }
-                    else
-                    BookKingRoomApi();
+                        validator: (value) {
+                  if (value == null || value.isEmpty) {
+                  return 'Please enter room number';
+                  }else if (int.parse(value) < 1 || int.parse(value) > 20){
+                    return 'We have only 20 King size room pls fill less';
                   }
-                },),
-                SizedBox(height: 30,)
+                  return null;
+                  },
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(12),
+                    child: CustomStaticDropdown(items: const ['Extra Bed Required*',
+                      'No',
+                      'Yes'
+                    ], onItemSelected: (String? value) {
+
+                      setState(() {
+                        value.toString();
+                        bedrequired =value.toString();
+                      });
+                    },),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(12),
+                    child: CustomStaticDropdown(items: const ['Booking For*',
+                      'Self','Spouse','Son','Daughter','Father','Mother','Guest'
+
+                    ], onItemSelected: (String? value) {
+                      setState(() {
+                        value.toString();
+                        client =value.toString();
+                      });
+                    },),
+                  ),
+
+                  PinkButton(text: "Check  Availability",ontap: () {
+                    if (_formKey.currentState!.validate()) {
+                      if(client=='Booking For*'){
+                        Utils.showToast('please select booking for');
+                        return;
+                      }else if(bedrequired =='Extra Bed Required*'){
+                        Utils.showToast('please select bed requirement');
+                      }
+                      else{
+                        DateTime tempDate = new DateFormat("dd-MM-yyyy").parse(startdate.text);
+                        DateTime tempDate2 = new DateFormat("dd-MM-yyyy").parse(enddate.text);
+                        difference = tempDate2.difference(tempDate).inDays;
+                        if(difference<=0){
+                          Utils.showToast('Checkout date must be greater than checkin date');
+
+                        }else
+                          BookKingRoomApi();
+                      }
+
+                    }
+                  },),
+                  SizedBox(height: 30,)
 
 
 
-              ],
-            ),
+                ],
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -91,226 +91,235 @@ class _BookBanquetState extends State<BookBanquet> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: Colors.black12,
-                width: double.infinity,
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Hall Type :  ${widget.halltype}",style: TextStyle1,),
-                    Text("Function date ${widget.dateOfFunctionController.text}"),
-                    Text("Function time ${widget.time}")
-
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 14,),
-
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: platenumber,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter no.of.plates',
-                    border: OutlineInputBorder(
-
-                    ),
-
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty || int.parse(value) <151) {
-                      Utils.showToast( 'Please enter number of plates greater than 151');
-                      return 'Please enter number of plates greater than 151';
-                    }else if (int.parse(value)>500){
-                      Utils.showToast( 'Please enter number of plates less than 500');
-                      return 'Please enter number of plates less than 500';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.all(12),
-                child: CustomStaticDropdown(items: const ['Function Organizing For*',
-                  'Self','Spouse','Son','Daughter','Father','Mother','Guest'
-                ], onItemSelected: (String? value) {
-                  setState(() {
-                    value.toString();
-                    functionfor =value.toString();
-                  });
-                },),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: functiontype,
-                  decoration: const InputDecoration(
-                    hintText: 'Function Type',
-                    border: OutlineInputBorder(
-
-                    ),
-
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter function type';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: hostname,
-                  decoration: const InputDecoration(
-                    hintText: 'Host Name',
-                    border: OutlineInputBorder(
-
-                    ),
-
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Host Name';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: hostnumber,
-                  maxLength: 10,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Host Mobile Number',
-                    border: OutlineInputBorder(
-                    ),
-
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length !=10) {
-                      Utils.showToast( 'Please enter number');
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Text("Additonal Items (Rate Mentioned Are Per Plate Basis):",style: TextStyle1,),
-              ),
-
-
-
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (bc,i)=>RadioListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: Text(widget.hallbookkingModel.menu![i].menuItems! ),
-                  value: i,
-                  onChanged: (radiovalue) {
-                    setState(() {
-                      radiotittle = i;
-
-                    });
-                  },
-                  groupValue: radiotittle,
-                ),
-                itemCount: widget.hallbookkingModel.menu!.length,
-
-
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (bc,i)=>CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title:Row(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: (){
+              FocusScope.of(context).unfocus();
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  color: Colors.black12,
+                  width: double.infinity,
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(liveCountersList[i].itemName!,style: TextStyle(fontSize: 15),),
-                      Spacer(),
-                      Text(liveCountersList[i].rate!),
+                      Text("Hall Type :  ${widget.halltype}",style: TextStyle1,),
+                      Text("Function date ${widget.dateOfFunctionController.text}"),
+                      Text("Function time ${widget.time}")
 
                     ],
                   ),
+                ),
 
-                  value: liveCountersList[i].isselected!,
-                  onChanged: ( value) {
+                SizedBox(height: 14,),
 
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: platenumber,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter no.of.plates',
+                      border: OutlineInputBorder(
+
+                      ),
+
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty || int.parse(value) <151) {
+                        Utils.showToast( 'Please enter number of plates greater than 151');
+                        return 'Please enter number of plates greater than 151';
+                      }else if (int.parse(value)>500){
+                        Utils.showToast( 'Please enter number of plates less than 500');
+                        return 'Please enter number of plates less than 500';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                Container(
+                  margin: EdgeInsets.all(12),
+                  child: CustomStaticDropdown(items: const ['Function Organizing For*',
+                    'Self','Spouse','Son','Daughter','Father','Mother','Guest'
+                  ], onItemSelected: (String? value) {
                     setState(() {
-                      print(i);
-                      liveCountersList[i].isselected = value!;
-                      print(liveCountersList[i].itemName);
-                      // values[key] = value!;
-                      // values[values.keys.toList()[i]]=value!;
-                      // print(value);
-                      // print(hallBookingModal[i].isselected!);
+                      value.toString();
+                      functionfor =value.toString();
+                    });
+                  },),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: functiontype,
+                    decoration: const InputDecoration(
+                      hintText: 'Function Type',
+                      border: OutlineInputBorder(
+
+                      ),
+
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter function type';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: hostnumber,
+                    maxLength: 10,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: 'Host Mobile Number',
+                      counterText: "",
+                      border: OutlineInputBorder(
+                      ),
+
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length !=10) {
+                        Utils.showToast( 'Please enter number');
+                        return 'Please enter number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: hostname,
+                    decoration: const InputDecoration(
+                      hintText: 'Host Name',
+                      border: OutlineInputBorder(
+
+                      ),
+
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Host Name';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Text("Additonal Items (Rate Mentioned Are Per Plate Basis):",style: TextStyle1,),
+                ),
+
+
+
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (bc,i)=>RadioListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text(widget.hallbookkingModel.menu![i].menuItems! ),
+                    value: i,
+                    onChanged: (radiovalue) {
+                      setState(() {
+                        radiotittle = i;
+
+                      });
+                    },
+                    groupValue: radiotittle,
+                  ),
+                  itemCount: widget.hallbookkingModel.menu!.length,
+
+
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (bc,i)=>CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title:Row(
+                      children: [
+                        Text(liveCountersList[i].itemName!,style: TextStyle(fontSize: 15),),
+                        Spacer(),
+                        Text(liveCountersList[i].rate!),
+
+                      ],
+                    ),
+
+                    value: liveCountersList[i].isselected!,
+                    onChanged: ( value) {
+
+                      setState(() {
+                        print(i);
+                        liveCountersList[i].isselected = value!;
+                        print(liveCountersList[i].itemName);
+                        // values[key] = value!;
+                        // values[values.keys.toList()[i]]=value!;
+                        // print(value);
+                        // print(hallBookingModal[i].isselected!);
+                      });
+                    },
+                  ),
+                  itemCount: liveCountersList.length,
+
+
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Terms and Conditions :',style: TextStyle1,),
+                      Conditions(),
+                      Text("Declartion :",style: TextStyle1,),
+                    ],
+                  ),
+                ),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Checkbox(
+                  checkColor: Colors.white,
+                  fillColor: MaterialStateProperty.resolveWith(getColor),
+                  value: isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isChecked = value!;
                     });
                   },
                 ),
-                itemCount: liveCountersList.length,
+                Expanded(child: Container(child: Text("All above information filled by me is correct to the best of my knowledge, and if it is found incorrect at any level, then forfiet the advance amount deposited by me and cancel my membership from RAS Club, Jaipur forever."))),
 
 
-              ),
+              ],
+            ),
+                PinkButton(text: 'Continue',
+                    ontap: (){
+                  if(functionfor=='Function Organizing For*'|| functionfor == "Function Organizing for*"){
+                    Utils.showToast('Please Enter Function Organizing for');
+                  }else
+                if (_formKey.currentState!.validate()){
+                    if(isChecked==true)
+                    BookBanquetHallApi();
+                  }
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Terms and Conditions :',style: TextStyle1,),
-                    Conditions(),
-                    Text("Declartion :",style: TextStyle1,),
-                  ],
-                ),
-              ),
-
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Checkbox(
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
-                },
-              ),
-              Expanded(child: Container(child: Text("All above information filled by me is correct to the best of my knowledge, and if it is found incorrect at any level, then forfiet the advance amount deposited by me and cancel my membership from RAS Club, Jaipur forever."))),
-
-
-            ],
-          ),
-              PinkButton(text: 'Continue',
-                  ontap: (){
-                if(functionfor=='Function Organizing For*'|| functionfor == "Function Organizing for*"){
-                  Utils.showToast('Please Enter Function Organizing for');
-                }else
-    if (_formKey.currentState!.validate()){
-                  if(isChecked==true)
-                  BookBanquetHallApi();
-                }
-                
-                  })
-            ],
+                    })
+              ],
+            ),
           ),
         ),
       ),
@@ -325,20 +334,17 @@ class _BookBanquetState extends State<BookBanquet> {
       String ids ="";
       String itemname="";
       for(int i=0 ; i<liveCountersList.length; i++){
-            // ids =ids+i.toString()+",";
-            // print(ids);
+
         if(liveCountersList[i].isselected){
           ids =ids+liveCountersList[i].id.toString()+",";
           itemname=itemname+liveCountersList[i].itemName.toString()+",";
         }
-            // ids =ids+liveCountersList[i].id.toString()+",";
 
       };
-
-
+      if(ids != ""){
       print(ids.substring(0,ids.length-1));
       ids =ids.substring(0,ids.length-1);
-      itemname=itemname.substring(0,itemname.length-1);
+      itemname=itemname.substring(0,itemname.length-1);}
       var body ={
         "mobile":prefs.getString(Constants.MOBILE_NUMBER),
         "memberType":prefs.getString(Constants.MEMBER_Type),
@@ -352,7 +358,7 @@ class _BookBanquetState extends State<BookBanquet> {
         "hall_type" :widget.halltype,
         "plates": "${platenumber.text}",
         "menu" :widget.hallbookkingModel.menu![radiotittle].menuName,
-        "extra_items": "${ids}",
+        "extra_items": "${ids==""?"0":ids}",
         "funtion_type" : "${functiontype.text}",
         "host_name": "${hostname.text}",
         "host_mobile": "${hostnumber.text}",
@@ -367,7 +373,8 @@ class _BookBanquetState extends State<BookBanquet> {
           },
           body:jsonEncode(body)
       );
-      if(response.statusCode==200){
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200 && data["Message"]=="Valid User"){
         var data = jsonDecode(response.body);
         print(data);
         print(body);
@@ -385,7 +392,11 @@ class _BookBanquetState extends State<BookBanquet> {
          advanceamount =banquetaccount.advanceAmount.toString();
          advanceamountper =banquetaccount.advanceAmount.toString();
         });
-      }else
+      }
+      else if(data["Message"]=="Unauthorized User"){
+        Utils.showToast("Unauthorized User");
+      }
+      else
       {
         print("dalid");
         print(response.statusCode.toString());

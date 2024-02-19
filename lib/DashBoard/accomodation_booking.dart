@@ -77,6 +77,7 @@ class _AccomodationState extends State<Accomodation> {
                                       Text('${widget.data.bookings![index].roomType}',style: TextStyle1,),
                                       Spacer(),
                                       Text('${widget.data.bookings![index].status}'),
+                                      SizedBox(width: 5,),
                                       if(widget.data.bookings![index].status== 'Expired')...{
                                         Icon(Icons.circle,color: Colors.red,size: 12,)
                                       }else

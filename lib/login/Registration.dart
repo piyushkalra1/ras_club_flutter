@@ -135,9 +135,11 @@ class _RegisterUserState extends State<RegisterUser> {
                   if(selgender=="Gender"){
                     Utils.showToast('Please select your gender');
                   }
-                  else
+                  else{
+                    callApi();
+                  }
                     print(selgender);
-                 callApi();
+
                 }
                 else
                   Utils.showToast('Please fill all the details');

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ras_club_flutter/const/setting_page_childs.dart';
 import 'package:ras_club_flutter/upload_photo.dart';
 import 'package:share_plus/share_plus.dart';
@@ -25,6 +26,7 @@ class _SettingtabState extends State<Settingtab> {
     // TODO: implement initState
     super.initState();
     getnamefunction();
+    getAppVersionInfo();
   }
 
   getnamefunction()async{
@@ -84,9 +86,13 @@ class _SettingtabState extends State<Settingtab> {
       },
     );
   }
-
+  String appVersion = "";
 
   @override
+  void getAppVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion = packageInfo.version;
+  }
   Widget build(BuildContext context) {
 
     return ListView(
@@ -204,6 +210,9 @@ class _SettingtabState extends State<Settingtab> {
           showAlertDialog(context);
           // showLogoutDialog();
         } ,),
+       Center(
+         child:  Text("Appversion $appVersion"),
+       )
 
       ],
     );

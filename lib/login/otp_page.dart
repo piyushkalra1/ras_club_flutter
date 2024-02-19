@@ -224,14 +224,14 @@ class _OtpPageState extends State<OtpPage> {
       isloading = false;
     });
     print(responseData);
-    if (responseData['Message'] == 'OTP verified') {
+    if (responseData['Message'] == 'OTP verified' && responseData["errorMessage"]=='') {
       prefs.setBool(Constants.IS_LOGIN, true);
       prefs.setString(Constants.SALT, responseData['Salt']);
       prefs.setString(Constants.MOBILE_NUMBER, widget.mobilenumber);
       prefs.setString(Constants.MEMVERSHIP_NO, responseData!['membershipNo']??"");
-      prefs.setString(Constants.USER_NAME, responseData['Name']);
-      prefs.setString(Constants.EMAIL, responseData['Email']);
-      prefs.setString(Constants.MEMBER_Type, responseData['memberType']);
+      prefs.setString(Constants.USER_NAME, responseData['Name']??"");
+      prefs.setString(Constants.EMAIL, responseData['Email']??"");
+      prefs.setString(Constants.MEMBER_Type, responseData['memberType']??"");
 
       setState(() {
         name =  prefs.getString(Constants.USER_NAME,)!;
@@ -244,7 +244,10 @@ class _OtpPageState extends State<OtpPage> {
           MaterialPageRoute(
             builder: (context) =>  HomePage()
           ),  (Route<dynamic> route) => false);
-    } else {
+    } else if(responseData["errorMessage"] !=''){
+      Utils.showToast(responseData["errorMessage"]);
+    }
+    else {
       Utils.showToast("Please Enter Correct OTP");
     }
   }

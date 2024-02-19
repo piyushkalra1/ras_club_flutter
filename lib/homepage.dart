@@ -112,6 +112,7 @@ class _HometabtextwidgetState extends State<Hometabtextwidget> {
 
         await AppVersionUpdate.showAlertUpdate(
           appVersionResult: result,
+          mandatory: true,
           context: context,
           backgroundColor: Colors.grey[200],
 
@@ -130,19 +131,7 @@ class _HometabtextwidgetState extends State<Hometabtextwidget> {
           cancelButtonText: 'Cancel',
         );
 
-        //## AppVersionUpdate.showBottomSheetUpdate ##
-        // await AppVersionUpdate.showBottomSheetUpdate(
-        //   context: context,
-        //   mandatory: true,
-        //   appVersionResult: result,
-        // );
 
-        //## AppVersionUpdate.showPageUpdate ##
-
-        // await AppVersionUpdate.showPageUpdate(
-        //   context: context,
-        //   appVersionResult: result,
-        // );
       }
     });
     // TODO: implement initState

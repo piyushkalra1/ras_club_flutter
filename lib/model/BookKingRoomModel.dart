@@ -11,27 +11,13 @@ class BookKingRoomModel {
 
   BookKingRoomModel.fromJson(dynamic json) {
     message = json['Message'];
-    print("1");
     availablity = json['Availablity'];
-    print("2");
     noOfRoomsAvailable = json['noOfRoomsAvailable'].toString();
-    print("3");
-
     totalFair = json['totalFair'];
-    print("4");
-
     totalGST = json['totalGST'];
-    print("5");
-
     grandTotal = json['grandTotal'];
-    print("6");
-
     totalNights = json['totalNights'];
-    print("7");
-
     outsiderReserved = json['outsiderReserved'];
-    print("8");
-
   }
   String ?message;
   String ?availablity;

@@ -41,6 +41,10 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
   late AnimationController controller;
 
   bool determinate = false;
+  TextEditingController _appointmentDateController = TextEditingController();
+
+  int selectedSlotTimeIndex = -1;
+  DateTime appointmentDate = DateTime.now();
   String myorderid="";
   Widget build(BuildContext context) {
     return  SafeArea(child: Scaffold(
@@ -89,7 +93,7 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
                     PinkButton(ontap: (){
                       bookroomapi();
                     },
-                    // Navigator.pop(context);},
+
 
                         text:'Pay Now'),
 
