@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,6 +19,8 @@ import '../facilitydetails/photo_gallery.dart';
 import 'constants.dart';
 import 'dashboard_cards.dart';
 import 'package:http/http.dart'as http;
+
+import 'dialogueerror.dart';
 
 
 
@@ -40,6 +43,8 @@ class _DashbordtabState extends State<Dashbordtab> {
   getnamefunction()async{
     var sharepreference =await SharedPreferences.getInstance();
     name =sharepreference.getString(Constants.USER_NAME)!;
+    photo = sharepreference.getString(Constants.Photo)??"";
+    _bytesImage = Base64Decoder().convert(photo);
     setState(() {
 
     });
@@ -47,20 +52,23 @@ class _DashbordtabState extends State<Dashbordtab> {
 
   @override
   String name="";
+  String photo="";
+  var  _bytesImage ;
   late final navigate;
 
 
   Widget build(BuildContext context) {
+    print("photo =>$photo");
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
+       Container(
               height: 220,
               // padding: EdgeInsets.all(15),
               width: double.infinity,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/images/daahboard_background.png'),
+                      image:  AssetImage('assets/images/daahboard_background.png'),
                     fit: BoxFit.fill
                   )
               ),
@@ -76,12 +84,13 @@ class _DashbordtabState extends State<Dashbordtab> {
                     child: Container(
                       width: 150.0,
                       height: 150.0,
-                      decoration: BoxDecoration(
 
-                        image: const DecorationImage(
+                        decoration: BoxDecoration(
+
+                        image:photo=="" ?const DecorationImage(
                           image: AssetImage('assets/images/sample_user.png'),
                           fit: BoxFit.cover,
-                        ),
+                        ): DecorationImage(image: MemoryImage(_bytesImage)),
                         borderRadius: BorderRadius.all(Radius.circular(75.0)),
                         border: Border.all(
                           color: Colors.white,
@@ -166,28 +175,29 @@ class _DashbordtabState extends State<Dashbordtab> {
           body: jsonEncode(body)
       );
       Future.delayed(Duration(seconds: 4), () {
+        var data = jsonDecode(response.body);
         Loader.hide();
         if (response.statusCode == 200) {
 
-          var data = jsonDecode(response.body);
-          print(data);
-          print(body);
-          var dashboardmodel = GetRoomBookingModel.fromJson(data);
-          print("data convert success");
-          print(data);
-          setState(() {
-            // bookinglist = data["booking"];
-          });
 
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => Accomodation(data: dashboardmodel,)));
+          if(data['Message']=="Unauthorized User")
+            showDialog(context: context, builder: (BuildContext bc) =>
+                DialogError(errorMsg: '',));
+        else{
+            var dashboardmodel = GetRoomBookingModel.fromJson(data);
+
+            setState(() {
+              // bookinglist = data["booking"];
+            });
+            if(dashboardmodel.message=="Valid User")
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => Accomodation(data: dashboardmodel,)));
+          }
+
+
+
         } else {
-          //
-          // Navigator.push(context, MaterialPageRoute(
-          //     builder: (context) => Accomodation(data: "",)));
-          print("dalid");
           print(response.statusCode.toString());
-          print(body);
         }
       });
 
@@ -235,26 +245,20 @@ class _DashbordtabState extends State<Dashbordtab> {
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body);
 
-          var dashboardmodel = GetHallBookingModel.fromJson(data);
-          print("data convert success");
-          setState(() {
+          if(data['Message']=="Unauthorized User")
+            showDialog(context: context, builder: (BuildContext bc) =>
+                DialogError(errorMsg: '',));
+          else
+            {
+              var dashboardmodel = GetHallBookingModel.fromJson(data);
+              setState(() {});
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HallBooking(data: dashboardmodel)));
+            }
 
-          });
-          // if(dashboardmodel.hallbookings!.isNotEmpty){
-            print(data);
-            print(body);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HallBooking(data: dashboardmodel)));
-          // }
-          // else
-          //   print("we are");
-          // print(data);
+
 
         } else {
-          // Navigator.push(context, MaterialPageRoute(
-          //     builder: (context) => HallBooking(data: "",)));
-          print("dalid");
           print(response.statusCode.toString());
-          print(body);
         }
       });
 
@@ -291,14 +295,20 @@ class _DashbordtabState extends State<Dashbordtab> {
         Loader.hide();
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body);
-          print(data);
-          print(body);
-          var dashboardmodel = DashboardsModel.fromJson(data);
-          print("data convert success");
-          setState(() {
-          });
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => GameBooking(data: "${data}",)));
+
+          if(data['Message']=="Unauthorized User")
+            showDialog(context: context, builder: (BuildContext bc) =>
+                DialogError(errorMsg: '',));
+
+          else{
+            var dashboardmodel = DashboardsModel.fromJson(data);
+            print("data convert success");
+            setState(() {
+            });
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => GameBooking(data: "${data}",)));
+          }
+
         } else {
           Navigator.push(context, MaterialPageRoute(
               builder: (context) => GameBooking(data: "",)));
@@ -336,14 +346,18 @@ class _DashbordtabState extends State<Dashbordtab> {
         Loader.hide();
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body);
-          print(data);
-          print(body);
-          var dashboardmodel = DashboardsModel.fromJson(data);
-          print("data convert success");
-          setState(() {
-          });
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => GymDashboard(data: "${data}",)));
+          if(data['Message']=="Unauthorized User")
+            showDialog(context: context, builder: (BuildContext bc) =>
+                DialogError(errorMsg: '',));
+       else{
+            var dashboardmodel = DashboardsModel.fromJson(data);
+            print("data convert success");
+            setState(() {
+            });
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => GymDashboard(data: "${data}",)));
+          }
+
         } else {
           Navigator.push(context, MaterialPageRoute(
               builder: (context) => GymDashboard(data: "",)));

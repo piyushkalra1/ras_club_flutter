@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 import 'package:ras_club_flutter/Booking/banquethall_details.dart';
 import 'package:ras_club_flutter/const/dashboard_cards.dart';
-
+import 'package:ras_club_flutter/const/pink_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart'as https;
 import '../Booking/book_twinbedroom.dart';
+import '../const/constants.dart';
 import '../const/dashbord_stack_container.dart';
+import '../homepage.dart';
 import 'model/GetHallBookingModel.dart';
 
 class HallBooking extends StatefulWidget {
@@ -27,18 +36,20 @@ class _HallBookingState extends State<HallBooking> {
               top: 130,
 
               child: Container(
-                height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height-50, width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Colors.white
                 ),
-                child:ListView.builder(
+                child: ListView.builder(
+                    shrinkWrap: true,
+
                     itemCount: widget.data.hallbookings!.length,
                     itemBuilder: (BuildContext context, int index) {
                       return  Container(
 
-                        padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.all(12),
+                        padding: EdgeInsets.only(bottom: 50,top: 5,left: 5,right: 5),
+                        margin: EdgeInsets.only(left: 12,right: 12),
 
                         decoration: BoxDecoration(
 
@@ -110,17 +121,132 @@ class _HallBookingState extends State<HallBooking> {
                             Row1(text1: "Booking Id ", text2: "${widget.data.hallbookings![index].orderId}"),
 
 
+                            widget.data.hallbookings![index].status== 'Expired'?SizedBox(): PinkButton(ontap: (){
+                              // CancelBookinApi(index);
+                              showAlertDialog(context,index);
+                            }, text: 'Cancel Booking'),
+
+
+
 
 
                           ],
                         ),
                       );
-                    })
+                    }),
               ),)
         ],
       ),
     );
   }
+
+  showAlertDialog(BuildContext context,int index) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("No"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes"),
+      onPressed: () async {
+        CancelBookinApi(index);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Cancel Booking"),
+      content: Text("Are you sure you want to cancel your booking ?",style: TextStyle(fontWeight: FontWeight.bold),),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void CancelBookinApi( int i)async{
+    Loader.show(context);
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var body = {
+
+      "fdate": widget.data.hallbookings![i].fdate,
+      "ftime": widget.data.hallbookings![i].ftime,
+      "hall_type": widget.data.hallbookings![i].hallType,
+
+
+
+        "id": widget.data.hallbookings![i].id,
+        "order_id": widget.data.hallbookings![i].orderId,
+        "amount": widget.data.hallbookings![i].grandTotal,
+
+
+        "mobile": prefs.getString(Constants.MOBILE_NUMBER),
+        "member_type": prefs.getString(Constants.MEMBER_Type),
+        "deviceId": "4E8EB26C-9143-49ED-B415-B67EE16A9E2F",
+        "refreshToken": "sgsghdsvdhjsd",
+        "hardwareDetails": "",
+        "email":prefs.getString(Constants.EMAIL),
+        "name": prefs.getString(Constants.USER_NAME),
+        "membership_no": prefs.getString(Constants.MEMVERSHIP_NO),
+      };
+      Response response = await https.post(
+          Uri.parse('https://api.rasclub.org/removeHallBooking.php'),
+          headers: {
+            "Accept": "application/json",
+            "User-Agent": "okhttp/3.10.0",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${prefs.getString(Constants.SALT)}"
+          },
+          body: jsonEncode(body)
+      );
+
+      Loader.hide();
+      if (response.statusCode == 200) {
+
+        var data = jsonDecode(response.body);
+        print(data);
+        if(data["response"]=="booking successfully removed!"){
+          Fluttertoast.showToast(
+              msg: data["response"],
+              toastLength: Toast.LENGTH_SHORT,
+
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          // Navigator.of(context)
+          //   ..pop()
+          //   ..pop();
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
+
+        }
+
+      } else {
+        print(response.statusCode.toString());
+
+      }
+
+
+
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
 }
 
 const TextStyle2= TextStyle(fontWeight: FontWeight.bold,fontSize: 15);

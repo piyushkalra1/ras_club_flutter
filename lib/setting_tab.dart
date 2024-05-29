@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,15 +30,19 @@ class _SettingtabState extends State<Settingtab> {
     getAppVersionInfo();
   }
 
+
   getnamefunction()async{
     var sharepreference =await SharedPreferences.getInstance();
     name =sharepreference.getString(Constants.USER_NAME)!;
+    photo = sharepreference.getString(Constants.Photo)??"";
+    _bytesImage = Base64Decoder().convert(photo);
     setState(() {
 
     });
   }
   @override
   String name ="";
+  var  _bytesImage ;
 
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
@@ -63,6 +68,7 @@ class _SettingtabState extends State<Settingtab> {
       onPressed: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool(Constants.IS_LOGIN, false);
+        prefs.clear();
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login(  )), (Route<dynamic> route)=> false);
 
       },
@@ -88,6 +94,8 @@ class _SettingtabState extends State<Settingtab> {
   }
   String appVersion = "";
 
+  String photo="";
+
   @override
   void getAppVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -112,16 +120,28 @@ class _SettingtabState extends State<Settingtab> {
                     width: 60.0,
                     height: 60.0,
                     decoration: BoxDecoration(
-                      image: const DecorationImage(
+
+                      image:photo=="" ?const DecorationImage(
                         image: AssetImage('assets/images/sample_user.png'),
                         fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.all( Radius.circular(75.0)),
+                      ): DecorationImage(image: MemoryImage(_bytesImage)),
+                      borderRadius: BorderRadius.all(Radius.circular(75.0)),
                       border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
+                        color: Colors.white,
+                        width: 4.0,
                       ),
                     ),
+                    // BoxDecoration(
+                    //   image: const DecorationImage(
+                    //     image: AssetImage('assets/images/sample_user.png'),
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    //   borderRadius: BorderRadius.all( Radius.circular(75.0)),
+                    //   border: Border.all(
+                    //     color: Colors.black,
+                    //     width: 1.0,
+                    //   ),
+                    // ),
                   ),
                 ),
                 SizedBox(width: 12,),

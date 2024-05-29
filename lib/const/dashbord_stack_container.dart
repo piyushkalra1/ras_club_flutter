@@ -18,7 +18,7 @@ class DashboaredStackContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(height:40,),
 
             InkWell(
               onTap: (){Navigator.pop(context);},

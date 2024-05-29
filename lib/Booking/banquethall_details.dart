@@ -163,6 +163,7 @@ class _BanquetHallDetailsState extends State<BanquetHallDetails> {
     print("Error while making payment   ${response.code}");
     print("Error while making payment   ${response.error}");
     print("Error while making payment   ${response.toString()}");
+    SavePaymentforHall("test", myorderid, "test");
 
     setState(() {
       isloading = false;

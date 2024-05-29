@@ -42,7 +42,7 @@ class _PartyHallHomeTabState extends State<PartyHallHomeTab> {
   @override
   TextEditingController dateOfFunctionController = TextEditingController();
   String timing ="Select Function Time*";
-  List<String> halltype =['Mini Party Hall (10 px)','Mini Party Hall (15-30 px)', 'Party Hall (30-50 px)',];
+  List<String> halltype =['Mini Party Hall (10 px)','Mini Party Hall (15-20 px)', 'Party Hall (30-50 px)',];
   List<String> halltype1 =['Mini Party Hall 2','Mini Party Hall', 'Party Hall'];
   int radiotittle1 =-1;
   String message ="";
@@ -103,7 +103,7 @@ class _PartyHallHomeTabState extends State<PartyHallHomeTab> {
                   height: 130,
                   child: Row(
                     children: [
-                      TvWiBreakfast(icon: Icons.apartment,text: '1500Sq.Ft',),
+                      TvWiBreakfast(icon: Icons.apartment,text: '12-120 Sq.Mt',),
                       SizedBox(width: 10,),
                       TvWiBreakfast(icon: Icons.restaurant,text: 'Pre-Menu',),
                       SizedBox(width: 10,),

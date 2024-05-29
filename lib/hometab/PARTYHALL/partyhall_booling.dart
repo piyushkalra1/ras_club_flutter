@@ -156,10 +156,10 @@ class _BookPartyHallState extends State<BookPartyHall> {
                         Utils.showToast( 'Please enter number of plates ');
                       }else if (widget.halltype .toString().trim()=='Mini Party Hall'){
                         print(value);
-                        if(int.parse(value) >30 || int.parse(value)<15){
+                        if(int.parse(value) >20 || int.parse(value)<15){
 
-                          Utils.showToast( 'Please enter number of plates between 15 to 30');
-                          return 'Please enter number of plates between 15 to 30';
+                          Utils.showToast( 'Please enter number of plates between 15 to 20');
+                          return 'Please enter number of plates between 15 to 20';
                         }
 
                       }else if (widget.halltype =='Party Hall'){

@@ -10,6 +10,7 @@ import 'package:lottie/lottie.dart';
 import 'package:ras_club_flutter/Booking/book_kingroom.dart';
 import 'package:ras_club_flutter/Booking/book_twinbedroom.dart';
 import 'package:ras_club_flutter/Booking/luxuryroom_booking.dart';
+import 'package:ras_club_flutter/const/attentionDialogue.dart';
 import 'package:ras_club_flutter/login/login_screen.dart';
 import 'package:ras_club_flutter/model/RoomRateModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -137,41 +138,60 @@ class _AccomodationHometabState extends State<AccomodationHometab> {
                     children: [
                       ApiListviewHorizontal(tittle: 'King Size Room',thumbnail: AssetImage(
                         'assets/images/kingsizeroom_3.jpg',
-                      ), text1: '25-35 Sq. Ft. Area',text2: "Sofa and Table",
+                      ), text1: '24-26 Sq.Mt. Area',text2: "Sofa and Table",
                         rate:"${kingsizeroomprice}", ontap:(){
                         if(message=="Unauthorized User"){
                           showDialog(context: context, builder: (BuildContext bc) =>
                               DialogError(errorMsg: '',));
-
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowAlertDialogue()));
-                        // showLoginAlertDialog(context);
                         }
                         else
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>BookKingRoom(roomtype: 'King Size Room',)));
+                          showDialog(context: context, builder: (BuildContext bc) =>
+                              DialogAttention(
+                                ontap: ()async{
+                                  Navigator.pop(context);
+                                 await Navigator.push(context, MaterialPageRoute(builder: (context)=>BookKingRoom(roomtype: 'King Size Room',)));
+
+                                },));
                         } , ),
                       ApiListviewHorizontal(tittle: 'Twin Bedded Room',thumbnail: AssetImage(
                         'assets/images/twinbeddedroom_1.jpg',
-                      ),text1: '35-45 Sq. Ft. Area',text2: "Toiletries",
+                      ),text1: '30-35 Sq.Mt. Area',text2: "Toiletries",
                         rate:twinbeddedroomprice, ontap: (){
                           if(message=="Unauthorized User"){
 
                             showDialog(context: context, builder: (BuildContext bc) =>
                                 DialogError(errorMsg: '',));
                           }else
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookTwinBed(roomtype: 'Twin Bedded Room',)));
+                            showDialog(context: context, builder: (BuildContext bc) =>
+                                DialogAttention(
+                                  ontap: ()async{
+                                    Navigator.pop(context);
+                                   await Navigator.push(context, MaterialPageRoute(builder: (context)=>BookTwinBed(roomtype: 'Twin Bedded Room',)));
+
+                                  },));
 
                         },
                       ),
                       ApiListviewHorizontal(tittle: 'Luxury Suite',thumbnail: AssetImage(
                         'assets/images/luxurysuiteroom_5.jpg',
-                      ),text1: '45-50 Sq. Ft. Area',text2: "Sofa and Table",
+                      ),text1: '30-35 Sq.Mt. Area',text2: "Sofa and Table",
                         rate: luxurysuiteprice, ontap: (){
                           if(message=="Unauthorized User"){
 
                             showDialog(context: context, builder: (BuildContext bc) =>
                                 DialogError(errorMsg: '',));
-                          }else
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LuxuryRoomBooking(roomtype: 'Luxury Suite',)));
+                          }else{
+
+                            showDialog(context: context, builder: (BuildContext bc) =>
+                                DialogAttention(
+                                  ontap: ()async{
+                                    Navigator.pop(context);
+                                  await  Navigator.push(context, MaterialPageRoute(builder: (context)=>LuxuryRoomBooking(roomtype: 'Luxury Suite',)));
+
+                                  },));
+
+                          }
+
 
                         },
                       ),

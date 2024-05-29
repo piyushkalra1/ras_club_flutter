@@ -101,11 +101,11 @@ class _ConfereceHometabState extends State<ConfereceHometab> {
                   height: 130,
                   child: Row(
                     children: [
-                      TvWiBreakfast(icon: Icons.apartment,text: '7000Sq.Ft',),
+                      TvWiBreakfast(icon: Icons.apartment,text: '300-320 Sq.Mt.',),
                       SizedBox(width: 10,),
                       TvWiBreakfast(icon: Icons.restaurant,text: 'Pre-Menu',),
                       SizedBox(width: 10,),
-                      TvWiBreakfast(icon: Icons.man_2_outlined,text: 'Upto 150',),
+                      TvWiBreakfast(icon: Icons.man_2_outlined,text: 'Upto 100',),
                     ],
                   ),
 

@@ -100,7 +100,7 @@ class _BanquetHallHometabState extends State<BanquetHallHometab> {
                   height: 130,
                   child: Row(
                     children: [
-                      TvWiBreakfast(icon: Icons.apartment,text: '1300Sq.Ft',),
+                      TvWiBreakfast(icon: Icons.apartment,text: '1000-1200 Sq.Mt',),
                       SizedBox(width: 10,),
                       TvWiBreakfast(icon: Icons.restaurant,text: 'Pre-Menu',),
                       SizedBox(width: 10,),

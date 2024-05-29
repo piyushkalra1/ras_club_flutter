@@ -35,40 +35,7 @@ class _UploadPhotoState extends State<UploadPhoto> {
         child: Column(
           children: [
             SizedBox(height: 100,),
-            // Center(
-            //   child: Container(
-            //     width: 240,height: 240,
-            //     decoration: BoxDecoration(
-            //
-            //
-            //
-            //       shape: BoxShape.circle,
-            //     ),
-            //     child: file==null?Container(
-            //
-            //       decoration: BoxDecoration(
-            //         image: const DecorationImage(
-            //           image: AssetImage('assets/images/man.jpg'),
-            //
-            //           fit: BoxFit.cover,
-            //         ),
-            //         // borderRadius: BorderRadius.all( Radius.circular(75.0)),
-            //         shape: BoxShape.circle,
-            //         border: Border.all(
-            //           color: Colors.black,
-            //           width: 1.0,
-            //         ),
-            //       ),
-            //     ):ClipOval(
-            //       child: Image.file(file!,fit: BoxFit.fill,
-            //
-            //           gaplessPlayback: true,
-            //
-            //
-            //       ),
-            //     ),
-            //   ),
-            // ),
+
             Center(
                 child: InkWell(
                   onTap: (){},
@@ -202,6 +169,8 @@ class _UploadPhotoState extends State<UploadPhoto> {
         print(data);
         print(body);
         print(response);
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString(Constants.Photo, imagepath);
         var imageModel =ImageModel.fromJson(data);
         print("data convert success");
         setState(() {

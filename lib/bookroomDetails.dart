@@ -64,10 +64,11 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
                     )
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(height: 20,),
                     Text('${widget.roomname} ',style: TextStyle1,),
+                    Text('₹ ${widget.grandtotal} ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 32),),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,6 +264,7 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
     setState(() {
       isloading = false;
     });
+    // savePaymentforRoom("test", "Test",myorderid);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
     Fluttertoast.showToast(
         msg: "Payment Failed",

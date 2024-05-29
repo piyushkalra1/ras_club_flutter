@@ -131,11 +131,11 @@ class _ConferenceHallBookingState extends State<ConferenceHallBooking>  {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty || int.parse(value) <50) {
-                        Utils.showToast( 'Please enter number of plates between 50 to 150');
-                        return "Please enter number of plates between 50 to 150'";
-                      }else if (int.parse(value)>150){
-                        Utils.showToast( 'Please enter number of plates between 50 to 150');
-                        return "Please enter number of plates between 50 to 150'";
+                        Utils.showToast( 'Please enter number of plates between 50 to 100');
+                        return "Please enter number of plates between 50 to 100'";
+                      }else if (int.parse(value)>100){
+                        Utils.showToast( 'Please enter number of plates between 50 to 100');
+                        return "Please enter number of plates between 50 to 100'";
                       }
                       return null;
                     },

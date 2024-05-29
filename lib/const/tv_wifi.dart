@@ -26,7 +26,7 @@ class TvWiBreakfast extends StatelessWidget {
               children: [
                 Icon(icon,color: Colors.black45,size: 35,),
                 SizedBox(height: 6,),
-                Text(text,style: TextStyle(color: Colors.black45,fontSize: 16),),
+                Text(text,style: TextStyle(color: Colors.black45,fontSize: 16),textAlign: TextAlign.center,),
               ],
             ),
           ),

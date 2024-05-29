@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:otp_timer_button/otp_timer_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:ras_club_flutter/homepage.dart';
 import 'package:ras_club_flutter/utils.dart';
@@ -176,17 +175,17 @@ class _OtpPageState extends State<OtpPage> {
 
 
 
-              OtpTimerButton(
-                backgroundColor: Colors.brown,
-                buttonType: ButtonType.text_button,
-
-                onPressed: () {},
-                text: Text(
-                  'Resend OTP',
-                  style: TextStyle(fontSize: 12),
-                ),
-                duration: 60,
-              ),
+              // OtpTimerButton(
+              //   backgroundColor: Colors.brown,
+              //   buttonType: ButtonType.text_button,
+              //
+              //   onPressed: () {},
+              //   text: Text(
+              //     'Resend OTP',
+              //     style: TextStyle(fontSize: 12),
+              //   ),
+              //   duration: 60,
+              // ),
 
             ],
           ),

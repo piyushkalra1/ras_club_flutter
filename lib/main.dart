@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           );
         },
 
-        title: 'Flutter Demo',
+        title: 'Ras Club',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,

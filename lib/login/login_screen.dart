@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -216,7 +217,7 @@ class _LoginState extends State<Login> {
       print("Inside If");
       print(responseData);
 
-      Utils.showToast('This Mobile is not registerd');
+      Utils.showToast('This Mobile is not registerd',gravity: ToastGravity.TOP);
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(builder: (context) => SignUpScreen(mobileNumber: mobileNumber,)),
