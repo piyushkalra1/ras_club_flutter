@@ -9,6 +9,8 @@ import 'package:ras_club_flutter/DashBoard/accomodation_booking.dart';
 import 'package:ras_club_flutter/DashBoard/game_booking.dart';
 import 'package:ras_club_flutter/DashBoard/hall_booking.dart';
 import 'package:ras_club_flutter/model/DashboardsModel.dart';
+import 'package:ras_club_flutter/model/GetGameBookingModel.dart';
+import 'package:ras_club_flutter/model/GetGymBooking.dart';
 import 'package:screen_loader/screen_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -272,6 +274,8 @@ class _DashbordtabState extends State<Dashbordtab> {
     try {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
       var body = {
         "mobile": prefs.getString(Constants.MOBILE_NUMBER),
         "memberType": prefs.getString(Constants.MEMBER_Type),
@@ -301,17 +305,17 @@ class _DashbordtabState extends State<Dashbordtab> {
                 DialogError(errorMsg: '',));
 
           else{
-            var dashboardmodel = DashboardsModel.fromJson(data);
-            print("data convert success");
+            var dashboardmodel = GetGameBookingModel.fromJson(data);
+
             setState(() {
             });
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => GameBooking(data: "${data}",)));
+                builder: (context) => GameBooking(data: dashboardmodel,)));
           }
 
         } else {
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => GameBooking(data: "",)));
+          // Navigator.push(context, MaterialPageRoute(
+          //     builder: (context) => GameBooking(data: dashboardmodel,)));
           print("dalid");
         }
       });
@@ -350,19 +354,15 @@ class _DashbordtabState extends State<Dashbordtab> {
             showDialog(context: context, builder: (BuildContext bc) =>
                 DialogError(errorMsg: '',));
        else{
-            var dashboardmodel = DashboardsModel.fromJson(data);
+            var dashboardmodel = GetGymBookingModel.fromJson(data);
             print("data convert success");
             setState(() {
             });
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => GymDashboard(data: "${data}",)));
+                builder: (context) => GymDashboard(data: dashboardmodel,)));
           }
 
         } else {
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => GymDashboard(data: "",)));
-          print("dalid");
-          print(response.statusCode.toString());
           print(body);
         }
       });

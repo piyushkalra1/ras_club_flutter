@@ -24,7 +24,6 @@ class GymBookingDetails extends StatefulWidget {
   final orderid;
 
   GymBookingDetails({required this.orderid,required this.duration,required this.trainer,required this.pttime,required this.fees });
-
   @override
   State<GymBookingDetails> createState() => _GymBookingDetailsState();
 }
@@ -149,6 +148,8 @@ class _GymBookingDetailsState extends State<GymBookingDetails> {
     print("Error while making payment   ${response.code}");
     print("Error while making payment   ${response.error}");
     print("Error while making payment   ${response.toString()}");
+    // GymPaymentApi("12234","testing");
+
     setState(() {
       isloading = false;
     });
@@ -172,56 +173,56 @@ class _GymBookingDetailsState extends State<GymBookingDetails> {
   }
 
 
-  Future<void> getPaymentStatus(String? paymentId) async {
-    if(paymentId == null)
-    {
-      return;
-    }
-    const url = "https://api.rasclub.org/savePaymentForGym.php";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
-    String name = prefs.getString(Constants.USER_NAME)!;
-    String email = prefs.getString(Constants.EMAIL )!;
-    String token = prefs.getString(Constants.SALT)!;
-    Map<String, String> body = {
-      "name": name,
-      "mobile": mobileNumber,
-      "email":email,
-
-      "payment_id":paymentId,
-      "deviceId": Utils.deviceId??"",
-      "refreshToken": "sgsghdsvdhjsd",
-      "hardwareDetails": Utils.deviceData??"",
-    };
-    print(token);
-    var headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "User-Agent": "okhttp/3.10.0",
-      'Authorization': 'Bearer $token',
-    };
-
-    var response = await http.post(Uri.parse(url),
-        headers: headers,
-        body: jsonEncode(body),
-        encoding: Encoding.getByName("utf-8"));
-    Map<String, dynamic> responseData = json.decode(response.body);
-    if (responseData['status'] == '200' &&
-        responseData["response"] == 'payment details successfully updated') {
-      Fluttertoast.showToast(
-          msg: "Payment Successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-      if(!mounted) return;
-      // getMembers();
-
-    }
-  }
+  // Future<void> getPaymentStatus(String? paymentId) async {
+  //   if(paymentId == null)
+  //   {
+  //     return;
+  //   }
+  //   const url = "https://api.rasclub.org/savePaymentForGym.php";
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
+  //   String name = prefs.getString(Constants.USER_NAME)!;
+  //   String email = prefs.getString(Constants.EMAIL )!;
+  //   String token = prefs.getString(Constants.SALT)!;
+  //   Map<String, String> body = {
+  //     "name": name,
+  //     "mobile": mobileNumber,
+  //     "email":email,
+  //
+  //     "payment_id":paymentId,
+  //     "deviceId": Utils.deviceId??"",
+  //     "refreshToken": "sgsghdsvdhjsd",
+  //     "hardwareDetails": Utils.deviceData??"",
+  //   };
+  //   print(token);
+  //   var headers = {
+  //     "Accept": "application/json",
+  //     "Content-Type": "application/json",
+  //     "User-Agent": "okhttp/3.10.0",
+  //     'Authorization': 'Bearer $token',
+  //   };
+  //
+  //   var response = await http.post(Uri.parse(url),
+  //       headers: headers,
+  //       body: jsonEncode(body),
+  //       encoding: Encoding.getByName("utf-8"));
+  //   Map<String, dynamic> responseData = json.decode(response.body);
+  //   if (responseData['status'] == '200' &&
+  //       responseData["response"] == 'payment details successfully updated') {
+  //     Fluttertoast.showToast(
+  //         msg: "Payment Successful",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0
+  //     );
+  //     if(!mounted) return;
+  //     // getMembers();
+  //
+  //   }
+  // }
 
   void GymPaymentApi (String? paymentId, String? singnature) async{
     Random rand = new Random();
@@ -244,14 +245,14 @@ class _GymBookingDetailsState extends State<GymBookingDetails> {
         "duration": widget.duration,
         "pt_type" : widget.trainer,
         "pt_duration": widget.pttime,
-        "amount": widget.fees,
-        "gst" : singnature,
+        "amount": "${(widget.fees)*.72}",
+        "gst" : "${(widget.fees)*.18}",
         "grand_total": widget.fees,
 
 
       };
       print(body);
-      Response response =await http.post(Uri.parse('https://api.rasclub.org/checkGymPrices.php'),
+      Response response =await http.post(Uri.parse('https://api.rasclub.org/savePaymentForGym.php'),
           headers: {
             "Accept": "application/json",
             "User-Agent":"okhttp/3.10.0",
@@ -264,23 +265,16 @@ class _GymBookingDetailsState extends State<GymBookingDetails> {
       print("${prefs.getString(Constants.SALT)}");
       if(response.statusCode==200){
         var data = jsonDecode(response.body);
-        print(data);
-        print(body);
+
         var gymsuccessfeemodel =SuccessGympay.fromJson(data);
-        print("data convert success");
-        print(response);
+
         setState(() {
-          // ptfees =gymfeemodel.pTFees.toString();
-          // gymfees =gymfeemodel.gymFees.toString();
-          // tottalfees =gymfeemodel.totalFees.toString();
+
         });
 
       }else
       {
-        CircularProgressIndicator();
         print("dalid");
-        print(response.statusCode.toString());
-        print(body);
       }
     }catch(e){
       print(e.toString());

@@ -12,6 +12,7 @@ import 'package:http/http.dart'as http;
 import '../../Booking/banquethall_details.dart';
 import '../../Booking/book_kingroom.dart';
 import '../../const/constants.dart';
+import '../../model/SportsModel.dart';
 import '../../utils.dart';
 
 
@@ -21,8 +22,14 @@ class SportDetails extends StatefulWidget {
   final String orderno;
   final String month;
   final String timeslot;
+  final game;
+  final type;
 
-  SportDetails({required this.month,required this.feesamount ,required this.timeslot,required this.orderno});
+
+
+  SportDetails({required this.month,required this.feesamount ,required this.timeslot,required this.orderno,
+  required this.game , required this.type
+  });
   @override
   State<SportDetails> createState() => _SportDetailsState();
 }
@@ -32,11 +39,21 @@ class _SportDetailsState extends State<SportDetails> {
   bool isloading =false;
   late AnimationController controller;
   bool determinate = false;
+ late  double fees=0.0;
+  late double gstfees=0.0;
+  late String grandtotal='';
+
   Widget build(BuildContext context) {
     double withoutgst  = int.parse(widget.feesamount)/1.18;
     int withoutgst1 =withoutgst.toInt();
     double gst = int.parse(widget.feesamount)-withoutgst;
     int gstvalue = gst.toInt();
+    setState(() {
+      fees =withoutgst;
+      gstfees= gst;
+      grandtotal =widget.feesamount;
+    });
+
     return  SafeArea(child: Scaffold(
       appBar: AppBar(),
       body: ListView(
@@ -127,9 +144,9 @@ class _SportDetailsState extends State<SportDetails> {
                 Divider(thickness: 1,),
                 Container1(text1: 'Month',text2: widget.month,),
                 Row1(text1: 'Time Slot',text2: widget.timeslot,),
-                Container1(text1: ' FEES',text2: ("${withoutgst1}"),),
-                Row1(text1: 'GST @ 18% ',text2: '${gstvalue}',),
-                Container1(text1: 'Grand Total',text2: widget.feesamount,),
+                Container1(text1: ' FEES',text2: ("${fees.toStringAsFixed(2)}"),),
+                Row1(text1: 'GST @ 18% ',text2: '${gstfees.toStringAsFixed(2)}',),
+                Container1(text1: 'Grand Total',text2: grandtotal,),
                 SizedBox(height: 20,),
 
               ],
@@ -142,7 +159,6 @@ class _SportDetailsState extends State<SportDetails> {
     ));
   }
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    //getPaymentStatus(response.paymentId);
     print(response.signature);
 
     setState(() {
@@ -157,7 +173,6 @@ class _SportDetailsState extends State<SportDetails> {
     print("Error while making payment   ${response.code}");
     print("Error while making payment   ${response.error}");
     print("Error while making payment   ${response.toString()}");
-
     setState(() {
       isloading = false;
     });
@@ -186,7 +201,7 @@ class _SportDetailsState extends State<SportDetails> {
     {
       return;
     }
-    const url = "https://api.rasclub.org/savePaymentForRooms.php";
+    const url = "https://api.rasclub.org/savePaymentForGames.php";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String mobileNumber = prefs.getString(Constants.MOBILE_NUMBER)!;
     String name = prefs.getString(Constants.USER_NAME)!;
@@ -239,22 +254,31 @@ class _SportDetailsState extends State<SportDetails> {
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var body ={
+
+
+
         "mobile":prefs.getString(Constants.MOBILE_NUMBER),
         "member_type":prefs.getString(Constants.MEMBER_Type),
         "deviceId": "4E8EB26C-9143-49ED-B415-B67EE16A9E2F",
         "refreshToken":"sgsghdsvdhjsd",
         "hardwareDetails":"",
-        "name":
-        prefs.getString(Constants.USER_NAME),
+        "name": prefs.getString(Constants.USER_NAME),
         "membership_no": prefs.getString(Constants.MEMVERSHIP_NO),
         "email": prefs.getString(Constants.EMAIL),
         "payment_id": paymentId,
         "signature_hash":signature,
         "order_id": orderId,
+        "amount": fees,
+        "gst": gstfees,
+           "grand_total": grandtotal,
+        "game": widget.game,
+          "type": widget.type,
+          "month": widget.month,
+          "time_slot": widget.timeslot,
         
       };
       print(body);
-      Response response =await http.post(Uri.parse('https://api.rasclub.org/savePaymentForHall.php'),
+      Response response =await http.post(Uri.parse('https://api.rasclub.org/savePaymentForGames.php'),
           headers: {
             "Accept": "application/json",
             "User-Agent":"okhttp/3.10.0",

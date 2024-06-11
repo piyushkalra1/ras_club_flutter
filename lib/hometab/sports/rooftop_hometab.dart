@@ -255,9 +255,6 @@ class _RooftopHometabState extends State<RooftopHometab> {
         }
         else{
           var gamingModel =SportsModel.fromJson(data);
-          print("data convert success");
-          print('1234e4');
-          print(response.body);
           setState(() {
             memberfee = gamingModel.feesMember.toString();
             nonmemberfee = gamingModel.feesNonMember.toString();
@@ -351,7 +348,10 @@ class _RooftopHometabState extends State<RooftopHometab> {
                       if(gamingModel.availablity=="Available")...{
                         InkWell(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SportDetails(month: "${month}", timeslot: "${timezone}",feesamount: "${nonmemberfee}",orderno: '${orderId.toString()}',)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SportDetails(month: "${month}", timeslot: "${timezone}",feesamount: "${nonmemberfee}",orderno: '${orderId.toString()}',
+                              game:"${gaming[radiotittle]}",
+                              type :"${type[radiotittle1]}",
+                            )));
                           },
                           child: Container(
                             height: 40,
@@ -367,7 +367,7 @@ class _RooftopHometabState extends State<RooftopHometab> {
                           height: 40,
                           color: Colors.red,
                           width: double.infinity,
-                          child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          child: Center(child: Text('Not Available',style: TextStyle(fontSize: 20,color: Colors.white),)),
                         )
 
 

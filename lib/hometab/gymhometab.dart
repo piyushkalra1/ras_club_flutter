@@ -310,7 +310,6 @@ class _GymHometabState extends State<GymHometab> {
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>GymBookingDetails(duration: duration[durationindex], trainer: ptrequirement![ptrequirementindex], pttime: ptduration![ptdurationindex], fees: double.parse(tottalfees) ,orderid: orderId,
 
                             )));
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>ConferenceHallBooking( time: timing, dateOfFunctionController: dateOfFunctionController, halltype: 'Conference Hall', conferencehallBookingModel: PartyhallBookingModel.fromJson(data),)));
 
                           },
                           child: Container(
@@ -328,7 +327,7 @@ class _GymHometabState extends State<GymHometab> {
                           color: Colors.red,
                           width: double.infinity,
                           margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                          child: Center(child: Text('Not Available',style: TextStyle(fontSize: 20,color: Colors.white),)),
                         )
 
 

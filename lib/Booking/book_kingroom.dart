@@ -527,7 +527,7 @@ class _BookKingRoomState extends State<BookKingRoom> {
                             color: Colors.red,
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: 8),
-                            child: Center(child: Text('Not Avialable',style: TextStyle(fontSize: 20,color: Colors.white),)),
+                            child: Center(child: Text('Not Available',style: TextStyle(fontSize: 20,color: Colors.white),)),
                           ),
                         )
 
