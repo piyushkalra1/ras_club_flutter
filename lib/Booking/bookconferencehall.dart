@@ -278,7 +278,17 @@ class _ConferenceHallBookingState extends State<ConferenceHallBooking>  {
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
                      Text('Terms and Conditions :',style: TextStyle1,),
-                     Conditions(),
+                     ListView.builder(
+                         itemCount:  widget.conferencehallBookingModel.term!.length,
+                         shrinkWrap: true,
+                         physics: NeverScrollableScrollPhysics(),
+                         itemBuilder: (BuildContext context, int index) {
+                           return ListTile(
+                               title: Text("${(index+1).toString()}. ${widget.conferencehallBookingModel.term![index].term.toString()}",
+                               style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,),
+                               ));
+                         }),
+                     // Conditions(),
                      Text("Declartion :",style: TextStyle1,),
                    ],
                  ),
@@ -310,7 +320,10 @@ class _ConferenceHallBookingState extends State<ConferenceHallBooking>  {
                   }
                   else
                       if(_formKey.currentState!.validate()){
+                        if(isChecked==true)
                         BookConferenceHallApi();
+                        else
+                          Utils.showToast("Please tick on diclaration first");
                       }
 
                     })

@@ -95,44 +95,44 @@ class _GymDashboardState extends State<GymDashboard> {
 
                               SizedBox(height: 20,),
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.blueGrey.shade100
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('Amount'),
-                                            Text('${widget.data.bookings![index].amount}'),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('GST'),
-                                            Text('${widget.data.bookings![index].gST}'),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('Grand Total '),
-                                            Text('${widget.data.bookings![index].grandTotal}'),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(15),
+                              //         color: Colors.blueGrey.shade100
+                              //     ),
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: Row(
+                              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //         children: [
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('Amount'),
+                              //               Text('${widget.data.bookings![index].amount}'),
+                              //             ],
+                              //           ),
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('GST'),
+                              //               Text('${widget.data.bookings![index].gST}'),
+                              //             ],
+                              //           ),
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('Grand Total '),
+                              //               Text('${widget.data.bookings![index].grandTotal}'),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
 
 
 

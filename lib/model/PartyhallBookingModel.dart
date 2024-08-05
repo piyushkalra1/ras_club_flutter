@@ -1,3 +1,5 @@
+import 'package:ras_club_flutter/model/TermsModel.dart';
+
 import 'Menu.dart';
 import 'LiveCounters.dart';
 
@@ -5,7 +7,8 @@ class PartyhallBookingModel {
   PartyhallBookingModel({
       this.message, 
       this.availablity, 
-      this.menu, 
+      this.menu,
+    this.term,
       this.liveCounters,});
 
   PartyhallBookingModel.fromJson(dynamic json) {
@@ -17,6 +20,15 @@ class PartyhallBookingModel {
         menu!.add(Menu.fromJson(v));
       });
     }
+
+    if (json['Terms'] !=  null ) {
+      term = [];
+      json['Terms'].forEach((v) {
+        term!.add(TermsModel.fromJson(v));
+      });
+    }
+    else
+      term =[];
     if (json['LiveCounters'] != null) {
       liveCounters = [];
       json['LiveCounters'].forEach((v) {
@@ -27,6 +39,7 @@ class PartyhallBookingModel {
   String ?message;
   String ?availablity;
   List<Menu>? menu;
+  List<TermsModel> ?term;
   List<LiveCounters> ?liveCounters;
 
   Map<String, dynamic> toJson() {

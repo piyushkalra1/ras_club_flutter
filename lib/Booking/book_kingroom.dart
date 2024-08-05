@@ -756,4 +756,4 @@ class CommonRow extends StatelessWidget {
 }
 
 
-const TextStyle1=TextStyle(fontSize: 20,fontWeight: FontWeight.w600);
+const TextStyle1=TextStyle(fontSize: 18,fontWeight: FontWeight.bold);

@@ -311,9 +311,18 @@ class _BookPartyHallState extends State<BookPartyHall> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Terms and Conditions :',style: TextStyle1,),
-                      Conditions(),
-                      SizedBox(height: 10,),
+                       Text('Terms and Conditions :',style: TextStyle1,),
+                      ListView.builder(
+                          itemCount:  widget.partyhallBookingModel.term!.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                                title: Text("${(index+1).toString()}. ${widget.partyhallBookingModel.term![index].term.toString()}",
+                                 style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400,),
+                                ));
+                          }),
+                      // Conditions(),
                       Text("Declartion :",style: TextStyle1,),
                     ],
                   ),

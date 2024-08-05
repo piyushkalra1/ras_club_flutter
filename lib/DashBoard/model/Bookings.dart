@@ -4,7 +4,8 @@ class Bookings {
       this.roomType, 
       this.checkin, 
       this.checkout, 
-      this.gst, 
+      this.gst,
+    this.totalroom,
       this.totalFair, 
       this.grandTotal, 
       this.createdAt, 
@@ -15,6 +16,7 @@ class Bookings {
 
   Bookings.fromJson(dynamic json) {
     id = json['Id'];
+    totalroom = json['TotalRooms'];
     roomType = json['RoomType'];
     checkin = json['Checkin'];
     checkout = json['Checkout'];
@@ -39,10 +41,13 @@ class Bookings {
   String ?bookingFor;
   String ?extraBed;
   String ?status;
+  String ? totalroom;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['Id'] = id;
+    map ['TotalRooms'] =totalroom;
+
     map['RoomType'] = roomType;
     map['Checkin'] = checkin;
     map['Checkout'] = checkout;

@@ -1,4 +1,4 @@
-class Menu {
+ class Menu {
   Menu({
       this.id, 
       this.menuName, 

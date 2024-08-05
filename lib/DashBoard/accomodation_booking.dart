@@ -120,55 +120,58 @@ class _AccomodationState extends State<Accomodation> {
                                 ],
                               ),
                               SizedBox(height: 20,),
-                              Center(child: Text('Booking Id :${widget.data.bookings![index].orderId}')),
-                              Text('Date & Time of Booking ${widget.data.bookings![index].createdAt}',textAlign: TextAlign.center,),
+                              Center(child: Text('Total rooms: ${widget.data.bookings![index].totalroom}')),
+                              Center(child: Text('Extra Bed Required: ${widget.data.bookings![index].extraBed}')),
 
+
+                              Center(child: Text('Booking Id: ${widget.data.bookings![index].orderId}')),
+                              Center(child: Text('Date & Time of Booking: ${widget.data.bookings![index].createdAt}',textAlign: TextAlign.center,),),
                               SizedBox(height: 20,),
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.blueGrey.shade100
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('Total Fair'),
-                                            Text('${widget.data.bookings![index].totalFair}'),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('GST'),
-                                            Text('${widget.data.bookings![index].gst}'),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text('Grand Total '),
-                                            Text('${widget.data.bookings![index].grandTotal}'),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(15),
+                              //         color: Colors.blueGrey.shade100
+                              //     ),
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       child: Row(
+                              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //         children: [
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('Total Fair'),
+                              //               Text('${widget.data.bookings![index].totalFair}'),
+                              //             ],
+                              //           ),
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('GST'),
+                              //               Text('${widget.data.bookings![index].gst}'),
+                              //             ],
+                              //           ),
+                              //           Column(
+                              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //             children: [
+                              //               Text('Grand Total '),
+                              //               Text('${widget.data.bookings![index].grandTotal}'),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
 
                               widget.data.bookings![index].status== 'Expired'?SizedBox():PinkButton(ontap: (){
                                 // CancelBookinApi(index);
                                 showAlertDialog(context,index);
                               }, text: 'Cancel Booking'),
-                              SizedBox(height: 50,),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         );

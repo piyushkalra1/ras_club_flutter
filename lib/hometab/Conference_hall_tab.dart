@@ -283,7 +283,7 @@ class _ConfereceHometabState extends State<ConfereceHometab> {
                               },
 
 
-                              Text('Party Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                              Text('Conference Hall',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
                             ],
                           ),
                         ),

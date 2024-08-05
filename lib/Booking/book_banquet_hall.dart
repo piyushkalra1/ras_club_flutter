@@ -241,6 +241,7 @@ class _BookBanquetState extends State<BookBanquet> {
 
 
                 ),
+
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -281,8 +282,19 @@ class _BookBanquetState extends State<BookBanquet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Terms and Conditions :',style: TextStyle1,),
-                      Conditions(),
-                      Text("Declartion :",style: TextStyle1,),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:widget.hallbookkingModel.terms!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                                title: Text("${(index+1).toString()}. ${widget.hallbookkingModel.terms![index].term!}",
+                                  style: TextStyle( fontSize: 15,fontWeight: FontWeight.w400),
+                                ),);
+                          }),
+
+
+                      Text("Declaration :",style: TextStyle1,),
                     ],
                   ),
                 ),
@@ -316,6 +328,9 @@ class _BookBanquetState extends State<BookBanquet> {
                     if(isChecked==true)
                     BookBanquetHallApi();
                   }
+
+                  else
+                    Utils.showToast("Please tick on diclaration first");
 
                     })
               ],

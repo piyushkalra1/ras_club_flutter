@@ -13,6 +13,7 @@ import '../homepage.dart';
 import '../utils.dart';
 import 'Booking/banquethall_details.dart';
 import 'Booking/book_kingroom.dart';
+import 'model/RoomTermModel.dart';
 
 
 class BookRoomDetails extends StatefulWidget {
@@ -35,9 +36,17 @@ class BookRoomDetails extends StatefulWidget {
 }
 
 class _BookRoomDetailsState extends State<BookRoomDetails> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getconditions();
+    super.initState();
+  }
   @override
 
   bool isloading =false;
+  bool isChecked = false;
   late AnimationController controller;
 
   bool determinate = false;
@@ -46,6 +55,8 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
   int selectedSlotTimeIndex = -1;
   DateTime appointmentDate = DateTime.now();
   String myorderid="";
+  List<Terms> termslist =[];
+
   Widget build(BuildContext context) {
     return  SafeArea(child: Scaffold(
       appBar: AppBar(),
@@ -55,7 +66,7 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
           Stack(
             children: [
               Container(
-                height: 300,
+                // height: 300,
                 margin: EdgeInsets.symmetric(horizontal: 10,vertical: 40),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -66,37 +77,60 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(height: 20,),
+                    SizedBox(height: 40,),
                     Text('${widget.roomname} ',style: TextStyle1,),
                     Text('₹ ${widget.grandtotal} ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 32),),
+
+                    SizedBox(height: 20,),
+                  Row(children: [
+                    SizedBox(width: 10,),
+                    Text('Terms and Conditions:',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                  ],),
+                    ListView.builder(
+                        itemCount: termslist.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+
+                              title: Text( "${(index+1).toString()} ${termslist[index].term.toString()}",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,), ));
+                        }),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          children: [
-                            Text('Check-in:',style: TextStyle1),
-                            Text(widget.checkindate,style: TextStyle(fontSize: 15),)
-                          ],
+                        Checkbox(
+                          checkColor: Colors.white,
+                          activeColor: Colors.green,
+                          side:
+                          BorderSide(width: 2, color: Colors.green),
+                          // fillColor: MaterialStateProperty.resolveWith(getColor),
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value!;
+                            });
+                          },
                         ),
-                        SizedBox(width: 10,),
-                        Container(width: 2,height: 30,color: Colors.black45,),
-                        SizedBox(width: 10,),
-                        Column(
-                          children: [
-                            Text('Check-out:',style: TextStyle1),
-                            Text(widget.checkoutdate,style: TextStyle(fontSize: 15),)
-                          ],
-                        ),
+                        Expanded(child:Padding(padding: EdgeInsets.only(top: 12),
+                        child: Text("I read the above terms and conditions",style: TextStyle(fontWeight: FontWeight.bold),),
+                        )),
+
+
                       ],
                     ),
                     // Text('₹ '"${widget.advance}",style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold),),
                     PinkButton(ontap: (){
+                      if(isChecked==true)
                       bookroomapi();
+                      else
+                        Utils.showToast("Please tick on terms and conditions");
                     },
 
 
                         text:'Pay Now'),
+                    SizedBox(height: 20,),
 
                   ],
                 ),
@@ -123,18 +157,39 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
             child: Column(
               children: [
                 Text('Booking Details',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
-
+                SizedBox(height: 12,),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   // child: Text(widget.menu),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Text('Check-in:',style: TextStyle1),
+                        Text(widget.checkindate,style: TextStyle(fontSize: 15),)
+                      ],
+                    ),
+                    SizedBox(width: 10,),
+                    Container(width: 2,height: 30,color: Colors.black45,),
+                    SizedBox(width: 10,),
+                    Column(
+                      children: [
+                        Text('Check-out:',style: TextStyle1),
+                        Text(widget.checkoutdate,style: TextStyle(fontSize: 15),)
+                      ],
+                    ),
+                  ],
                 ),
                 // Text(widget.menu)
                 SizedBox(height: 15,),
                 Divider(thickness: 1,),
                 Container1( text1: 'Total Stay : ', text2: "${widget.Nightstay}/Night",),
                 Row1(text1: 'Total Rooms : ', text2: "${widget.RoomNumbers} Room"),
-                Container1(text1: 'Extra Bed Required : ', text2: widget.Bedrequired),
+                Container1(text1: 'Extra Bed Required:', text2: widget.Bedrequired),
                 Row1(text1:  'Booking For : ', text2: widget.bookingfor),
                 Container1(text1: 'Total Fair : ', text2: " ₹${widget.totalfair}"),
                 Row1(text1: 'GST @12% : ', text2: " ₹ ${widget.gst}"),
@@ -150,6 +205,45 @@ class _BookRoomDetailsState extends State<BookRoomDetails> {
       ),
     ));
   }
+
+  void getconditions()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var body ={
+      "mobile":prefs.getString(Constants.MOBILE_NUMBER),
+      "member_type":prefs.getString(Constants.MEMBER_Type),
+      "deviceId": "4E8EB26C-9143-49ED-B415-B67EE16A9E2F",
+      "refreshToken":"sgsghdsvdhjsd",
+      "hardwareDetails":"",
+      "name":
+      prefs.getString(Constants.USER_NAME),
+      "membership_no": prefs.getString(Constants.MEMVERSHIP_NO),
+    };
+    print(body);
+    Response response =await http.post(Uri.parse('https://api.rasclub.org/getRoomBookingConditions.php'),
+        headers: {
+          "Accept": "application/json",
+          "User-Agent":"okhttp/3.10.0",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${prefs.getString(Constants.SALT)}"
+        },
+
+        body:jsonEncode(body)
+    );
+    print("${prefs.getString(Constants.SALT)}");
+
+    var data = jsonDecode(response.body);
+    print(data);
+    if(data["Message"]=="Valid User"){
+      var templist =data["terms"]as List<dynamic>;
+      setState(() {
+        termslist = templist.map((e) => Terms.fromJson(e)).toList();
+      });
+
+      // Utils.flushbarSuccessMessage('Start'.toString(), context);
+
+    }
+  }
+
   void bookroomapi () async{
     Random rand = new Random();
     int rand_int1 = rand.nextInt(1000000);
